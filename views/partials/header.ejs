@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %> | <%= siteName %></title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand-card">
+      <h2><%= siteName %></h2>
+      <p>Local test build with Pokémon Center styling.</p>
+    </div>
+    <nav class="nav-list">
+      <a class="nav-link <%= currentPath === '/' ? 'active' : '' %>" href="/"><%= navLabels.home %></a>
+      <a class="nav-link <%= currentPath === '/my-reports' ? 'active' : '' %>" href="/my-reports"><%= navLabels.myReports %></a>
+      <a class="nav-link <%= currentPath === '/card-reports' ? 'active' : '' %>" href="/card-reports"><%= navLabels.cardReports %></a>
+      <a class="nav-link <%= currentPath === '/merchandise' ? 'active' : '' %>" href="/merchandise"><%= navLabels.merchandise %></a>
+      <% if (isAdmin) { %>
+        <a class="nav-link <%= currentPath === '/admin' ? 'active' : '' %>" href="/admin"><%= navLabels.admin %></a>
+      <% } %>
+    </nav>
+    <div class="sidebar-note">
+      <% if (isAdmin) { %>
+        Admin tools are enabled.
+      <% } else { %>
+        Log in as admin to upload reports and test QR-linked pages.
+      <% } %>
+    </div>
+  </aside>
+  <main class="main-column">
+    <header class="topbar">
+      <div>
+        <h1 class="top-title"><%= siteName %></h1>
+        <div class="top-subtitle">Pokémon Center themed local test version</div>
+      </div>
+      <div class="top-actions">
+        <% if (currentUser) { %>
+          <div class="pill">
+            Signed in as <strong><%= currentUser.username || currentUser.email %></strong>
+            <% if (isAdmin) { %><span class="admin-badge">Admin</span><% } %>
+          </div>
+          <form action="/logout" method="post"><button class="btn btn-dark" type="submit">Logout</button></form>
+        <% } else { %>
+          <a class="btn btn-light" href="/login">Log In</a>
+          <a class="btn btn-dark" href="/signup">New Account</a>
+        <% } %>
+      </div>
+    </header>
+    <div class="page-wrap">
+      <% if (flash) { %><div class="flash"><%= flash %></div><% } %>

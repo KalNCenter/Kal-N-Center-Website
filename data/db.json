@@ -1,0 +1,77 @@
+{
+  "config": {
+    "siteName": "Kal'N Center",
+    "navLabels": {
+      "home": "Home",
+      "myReports": "My Reports",
+      "cardReports": "Card Reports",
+      "merchandise": "Merchandise",
+      "admin": "Admin"
+    },
+    "banners": [
+      "/uploads/banners/1775598521956-DSC00597.JPG",
+      "/uploads/banners/1775598521987-DSC00596.JPG",
+      "/uploads/banners/1775598522005-1.jpg",
+      "/uploads/banners/1775598522066-1.jpg"
+    ],
+    "content": {
+      "heroTitle": "Professional card reports, collector access, and future trading tools.",
+      "heroSubtitle": "Explore graded card reports, manage your personal collection, and test QR-linked report pages locally before going live.",
+      "companyHeading": "Kal'N-Center Website",
+      "companyIntro": "Kal'N-Center is not a replacement for PSA, CGC, Tag or other well known Trading Card Companies. Currently our focus is Pokémon Card. The services we provide are: Pre-grading, Authentication likeliness, Card Preservation, Reporting, and cataloging.",
+      "companyIntro2": "All of these services give information when buying and selling raw cards. For collectors who don't want to send a card out for grading, this is a great option to improve your display case and preserve your collection, and digitalize it with detailed reports.",
+      "serviceHeading": "About the Kal'N-Center services",
+      "preGrading": "Our system sticks to the four basics of visual inspections: centering, corners, edges, and surface.",
+      "authentication": "It is not possible for our systems to perform the rip test on every card. The card images are compared to a database of same or similar cards to check reference points, measurements, and key features. With that information, we then provide a percentage of likeliness.",
+      "reporting": "Each time a card is graded a report is generated. The report includes the total grade, subgrades, enlarged images of the card, and a printable Kal'N-Center slab tag. The reports are stored on the local test website, and the QR code on the slab tag is a shortcut directly to the report page.",
+      "preservation": "Bring in your favorite card to put into a slab to display with honor, or just to help protect your investment.",
+      "contactHeading": "Contact Us",
+      "contactText": "Provide your email and any message or question you have, and we will get back to you ASAP!"
+    }
+  },
+  "users": [
+    {
+      "id": "u-admin",
+      "email": "admin@kalncenter.com",
+      "username": "Admin",
+      "firstName": "Site",
+      "lastName": "Admin",
+      "password": "admin123",
+      "role": "admin",
+      "tradeEnabled": false
+    },
+    {
+      "id": "u-kalan",
+      "email": "kalan@example.com",
+      "username": "KalNCenter",
+      "firstName": "Kalan",
+      "lastName": "Lewis",
+      "password": "password123",
+      "role": "user",
+      "tradeEnabled": false
+    }
+  ],
+  "reports": [
+    {
+      "id": "rpt-1001",
+      "reportNumber": "RPT-1001",
+      "cardName": "Charizard",
+      "cardNumber": "4/102",
+      "cardGrade": "9.5",
+      "setName": "Base Set",
+      "reportDate": "2026-03-14",
+      "registeredUser": "kalan@example.com",
+      "tradable": true,
+      "cardImage": "https://images.unsplash.com/photo-1618331835717-801e976710b2?auto=format&fit=crop&w=300&q=80",
+      "reportFile": "",
+      "notes": "Demo report for local testing.",
+      "subgrades": {
+        "centering": "9.5",
+        "corners": "9.0",
+        "edges": "9.5",
+        "surface": "10.0"
+      }
+    }
+  ],
+  "contacts": []
+}

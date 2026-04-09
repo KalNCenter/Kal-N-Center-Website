@@ -1,0 +1,46 @@
+<%- include('partials/header') %>
+<section class="hero-card">
+  <div class="hero-slider" data-slider>
+    <% banners.forEach(function(banner, index) { %>
+      <div class="hero-slide <%= index === 0 ? 'show' : '' %>"><img src="<%= banner %>" alt="Banner <%= index + 1 %>" /></div>
+    <% }) %>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <span class="hero-badge">Welcome</span>
+      <h2><%= content.heroTitle %></h2>
+      <p><%= content.heroSubtitle %></p>
+      <div class="hero-actions">
+        <a class="btn btn-dark" href="/signup">Create Account</a>
+        <a class="btn btn-blue" href="/card-reports">Browse Reports</a>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="grid three">
+  <div class="panel accent-red"><h3>Pre-Grading</h3><p>Our system focuses on centering, corners, edges, and surface so collectors have a practical idea of card condition before deciding what to do next.</p></div>
+  <div class="panel accent-tan"><h3>Authentication Likeliness</h3><p>Card images are compared to same or similar references so important measurements and key features can be reviewed before buying or selling raw cards.</p></div>
+  <div class="panel accent-blue"><h3>Reporting & Preservation</h3><p>Every graded card can generate a detailed report and printable slab tag while helping preserve and display your collection with pride.</p></div>
+</section>
+<section class="panel"><h2><%= content.companyHeading %></h2><p><%= content.companyIntro %></p><p><%= content.companyIntro2 %></p></section>
+<section class="panel">
+  <h2><%= content.serviceHeading %></h2>
+  <div class="grid two">
+    <div class="service-card"><h3>Pre-Grading</h3><p><%= content.preGrading %></p></div>
+    <div class="service-card"><h3>Authentication Likeliness</h3><p><%= content.authentication %></p></div>
+    <div class="service-card"><h3>Reporting</h3><p><%= content.reporting %></p></div>
+    <div class="service-card"><h3>Card Preservation</h3><p><%= content.preservation %></p></div>
+  </div>
+</section>
+<section class="grid contact-grid">
+  <div class="panel">
+    <h2><%= content.contactHeading %></h2>
+    <p><%= content.contactText %></p>
+    <p class="muted">Messages are saved locally in this test version.</p>
+  </div>
+  <form class="panel form-grid single" action="/contact" method="post">
+    <label><span>Email</span><input type="email" name="email" required placeholder="your@email.com" /></label>
+    <label><span>Message</span><textarea name="message" rows="7" required placeholder="Type your message here..."></textarea></label>
+    <button class="btn btn-blue fit" type="submit">Send</button>
+  </form>
+</section>
+<%- include('partials/footer') %>

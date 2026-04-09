@@ -1,0 +1,77 @@
+<%- include('partials/header') %>
+<section class="panel">
+  <div class="section-head"><div><h2>Admin Controls</h2><p class="muted">These tools are only visible while logged in as admin.</p></div></div>
+  <form class="admin-form" action="/admin/content" method="post" enctype="multipart/form-data">
+    <div class="grid two">
+      <div class="panel inset">
+        <h3>Banner Images</h3>
+        <% db.config.banners.forEach(function(banner, i) { %>
+          <label><span>Banner <%= i + 1 %> URL</span><input type="text" name="bannerUrl<%= i %>" value="<%= banner %>" /></label>
+          <label><span>Or upload Banner <%= i + 1 %></span><input type="file" name="bannerFile<%= i %>" accept="image/*" /></label>
+        <% }) %>
+      </div>
+      <div class="panel inset">
+        <h3>Tab Labels</h3>
+        <label><span>Home</span><input type="text" name="nav_home" value="<%= db.config.navLabels.home %>" /></label>
+        <label><span>My Reports</span><input type="text" name="nav_myReports" value="<%= db.config.navLabels.myReports %>" /></label>
+        <label><span>Card Reports</span><input type="text" name="nav_cardReports" value="<%= db.config.navLabels.cardReports %>" /></label>
+        <label><span>Merchandise</span><input type="text" name="nav_merchandise" value="<%= db.config.navLabels.merchandise %>" /></label>
+      </div>
+    </div>
+    <div class="panel inset">
+      <h3>Homepage Text</h3>
+      <div class="grid two">
+        <label><span>Hero Title</span><textarea name="heroTitle" rows="3"><%= db.config.content.heroTitle %></textarea></label>
+        <label><span>Hero Subtitle</span><textarea name="heroSubtitle" rows="3"><%= db.config.content.heroSubtitle %></textarea></label>
+        <label><span>Company Heading</span><input type="text" name="companyHeading" value="<%= db.config.content.companyHeading %>" /></label>
+        <label><span>Service Heading</span><input type="text" name="serviceHeading" value="<%= db.config.content.serviceHeading %>" /></label>
+        <label class="full"><span>Company Intro</span><textarea name="companyIntro" rows="4"><%= db.config.content.companyIntro %></textarea></label>
+        <label class="full"><span>Company Intro 2</span><textarea name="companyIntro2" rows="4"><%= db.config.content.companyIntro2 %></textarea></label>
+        <label class="full"><span>Pre-Grading</span><textarea name="preGrading" rows="3"><%= db.config.content.preGrading %></textarea></label>
+        <label class="full"><span>Authentication Likeliness</span><textarea name="authentication" rows="4"><%= db.config.content.authentication %></textarea></label>
+        <label class="full"><span>Reporting</span><textarea name="reporting" rows="4"><%= db.config.content.reporting %></textarea></label>
+        <label class="full"><span>Preservation</span><textarea name="preservation" rows="3"><%= db.config.content.preservation %></textarea></label>
+        <label><span>Contact Heading</span><input type="text" name="contactHeading" value="<%= db.config.content.contactHeading %>" /></label>
+        <label><span>Contact Text</span><textarea name="contactText" rows="3"><%= db.config.content.contactText %></textarea></label>
+      </div>
+    </div>
+    <button class="btn btn-dark" type="submit">Save Homepage Changes</button>
+  </form>
+</section>
+<section class="panel">
+  <h2>Upload New Report</h2>
+  <form class="admin-form" action="/admin/report-upload" method="post" enctype="multipart/form-data">
+    <div class="grid two">
+      <label><span>Report Number</span><input type="text" name="reportNumber" required /></label>
+      <label><span>Registered User Email</span><input type="email" name="registeredUser" required /></label>
+      <label><span>Card Name</span><input type="text" name="cardName" required /></label>
+      <label><span>Card Number</span><input type="text" name="cardNumber" /></label>
+      <label><span>Card Grade</span><input type="text" name="cardGrade" /></label>
+      <label><span>Set Name</span><input type="text" name="setName" /></label>
+      <label><span>Report Date</span><input type="date" name="reportDate" /></label>
+      <label><span>Tradable</span><input type="checkbox" name="tradable" /></label>
+      <label><span>Centering</span><input type="text" name="centering" /></label>
+      <label><span>Corners</span><input type="text" name="corners" /></label>
+      <label><span>Edges</span><input type="text" name="edges" /></label>
+      <label><span>Surface</span><input type="text" name="surface" /></label>
+      <label class="full"><span>Notes</span><textarea name="notes" rows="3"></textarea></label>
+      <label><span>Card Image URL (optional)</span><input type="text" name="cardImageUrl" /></label>
+      <label><span>Or Upload Card Image</span><input type="file" name="cardImageFile" accept="image/*" /></label>
+      <label class="full"><span>Upload Report File (PDF or image)</span><input type="file" name="reportFile" accept=".pdf,image/*" /></label>
+    </div>
+    <button class="btn btn-blue" type="submit">Upload Report</button>
+  </form>
+</section>
+<section class="panel">
+  <h2>Recent Contact Messages</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Date</th><th>Email</th><th>Message</th></tr></thead>
+      <tbody>
+        <% if (!db.contacts.length) { %><tr><td class="empty" colspan="3">No contact messages yet.</td></tr><% } %>
+        <% db.contacts.slice().reverse().forEach(function(item) { %><tr><td><%= item.date %></td><td><%= item.email %></td><td><%= item.message %></td></tr><% }) %>
+      </tbody>
+    </table>
+  </div>
+</section>
+<%- include('partials/footer') %>

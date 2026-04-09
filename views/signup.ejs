@@ -1,0 +1,14 @@
+<%- include('partials/header') %>
+<section class="panel">
+  <h2>Create New Account</h2>
+  <form class="form-grid" action="/signup" method="post">
+    <label><span>Email Address</span><input type="email" name="email" required /></label>
+    <label><span>User Name</span><input type="text" name="username" required /></label>
+    <label><span>First Name</span><input type="text" name="firstName" required /></label>
+    <label><span>Last Name</span><input type="text" name="lastName" required /></label>
+    <label><span>Password</span><input type="password" name="password" required /></label>
+    <label><span>Confirm Password</span><input type="password" name="confirmPassword" required /></label>
+    <button class="btn btn-dark full" type="submit">Create Account</button>
+  </form>
+</section>
+<%- include('partials/footer') %>

@@ -1,0 +1,1 @@
+(function(){const slider=document.querySelector('[data-slider]');if(!slider)return;const slides=Array.from(slider.querySelectorAll('.hero-slide'));if(!slides.length)return;let current=0;setInterval(()=>{slides[current].classList.remove('show');current=(current+1)%slides.length;slides[current].classList.add('show')},3200)})();
