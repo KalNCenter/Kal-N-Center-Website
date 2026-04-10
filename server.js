@@ -455,3 +455,71 @@ app.post(
 app.listen(PORT, () => {
   console.log(`RUNNING ON http://localhost:${PORT}`)
 })
+
+app.post('/api/upload-report', async (req, res) => {
+  try {
+    const {
+      reportNumber,
+      cardName,
+      cardNumber,
+      cardGrade,
+      setName,
+      reportDate,
+      registeredUser,
+      tradable,
+      cardImage,
+      reportFile,
+      notes,
+      centering,
+      corners,
+      edges,
+      surface
+    } = req.body
+
+    await query(`
+      INSERT INTO reports (
+        id,
+        report_number,
+        card_name,
+        card_number,
+        card_grade,
+        set_name,
+        report_date,
+        registered_user,
+        tradable,
+        card_image,
+        report_file,
+        notes,
+        centering,
+        corners,
+        edges,
+        surface
+      ) VALUES (
+        $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16
+      )
+    `, [
+      `report-${Date.now()}`,
+      reportNumber,
+      cardName,
+      cardNumber,
+      cardGrade,
+      setName,
+      reportDate,
+      registeredUser,
+      tradable,
+      cardImage,
+      reportFile,
+      notes,
+      centering,
+      corners,
+      edges,
+      surface
+    ])
+
+    res.json({ success: true })
+
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: 'Upload failed' })
+  }
+})
