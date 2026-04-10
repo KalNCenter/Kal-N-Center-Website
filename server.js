@@ -56,7 +56,7 @@ const uploadStorage = multer.diskStorage({
   }
 })
 
-const upload = multer({ storage: uploadStorage })
+const reportUpload = multer({ storage: uploadStorage })
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 app.use((req, res, next) => {
@@ -135,7 +135,7 @@ app.get('/', async (req, res) => {
   ]
 app.post(
   '/upload',
-  upload.fields([
+  reportUpload.fields([
     { name: 'html_file', maxCount: 1 },
     { name: 'pdf_file', maxCount: 1 },
   ]),
