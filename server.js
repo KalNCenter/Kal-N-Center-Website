@@ -8,6 +8,8 @@ import { fileURLToPath } from 'url'
 import QRCode from 'qrcode'
 import pg from 'pg'
 
+fs.mkdirSync(path.join(UPLOAD_ROOT, 'reports'), { recursive: true })
+
 const { Pool } = pg
 
 const pool = new Pool({
@@ -39,6 +41,24 @@ app.use(
 app.use(express.static(path.join(__dirname, 'public')))
 app.use('/uploads', express.static(UPLOAD_ROOT))
 
+const REPORTS_DIR = path.join(__dirname, 'uploads', 'reports')
+fs.mkdirSync(REPORTS_DIR, { recursive: true })
+
+const uploadStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, REPORTS_DIR)
+  },
+  filename: (req, file, cb) => {
+    const reportNumber = String(req.body.report_number || 'report').replace(/[^a-zA-Z0-9_-]/g, '_')
+    const ext = path.extname(file.originalname) || (file.fieldname === 'html_file' ? '.html' : '.pdf')
+    const filename = `${reportNumber}-${file.fieldname}${ext}`
+    cb(null, filename)
+  }
+})
+
+const upload = multer({ storage: uploadStorage })
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 app.use((req, res, next) => {
   res.locals.currentPath = req.path
   next()
@@ -113,7 +133,44 @@ app.get('/', async (req, res) => {
     'https://images.unsplash.com/photo-1608889175123-8ee362201f81?auto=format&fit=crop&w=1600&q=80',
     'https://images.unsplash.com/photo-1627856013091-fed6e4e30025?auto=format&fit=crop&w=1600&q=80',
   ]
+app.post(
+  '/upload',
+  upload.fields([
+    { name: 'html_file', maxCount: 1 },
+    { name: 'pdf_file', maxCount: 1 },
+  ]),
+  async (req, res) => {
+    try {
+      const reportNumber = String(req.body.report_number || '').trim()
 
+      if (!reportNumber) {
+        return res.status(400).json({ error: 'Missing report_number' })
+      }
+
+      const htmlFile = req.files?.html_file?.[0]
+      const pdfFile = req.files?.pdf_file?.[0]
+
+      if (!htmlFile || !pdfFile) {
+        return res.status(400).json({ error: 'Missing html_file or pdf_file' })
+      }
+
+      const baseUrl = process.env.BASE_URL || `${req.protocol}://${req.get('host')}`
+
+      const reportUrl = `${baseUrl}/uploads/reports/${htmlFile.filename}`
+      const pdfUrl = `${baseUrl}/uploads/reports/${pdfFile.filename}`
+
+      return res.json({
+        success: true,
+        report_url: reportUrl,
+        pdf_url: pdfUrl
+      })
+
+    } catch (err) {
+      console.error('Upload error:', err)
+      return res.status(500).json({ error: 'Upload failed' })
+    }
+  }
+)
   const content = {
     heroTitle: 'Professional card reports, collector access, and future trading tools.',
     heroSubtitle:
