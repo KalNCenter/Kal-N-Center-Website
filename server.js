@@ -210,18 +210,28 @@ app.get('/my-reports', requireLogin, async (req, res) => {
   const user = await getCurrentUser(req)
 
   const result = await query(
-    `SELECT * FROM reports WHERE LOWER(registered_user) = $1 ORDER BY report_date DESC NULLS LAST, id DESC`,
+    'SELECT * FROM reports WHERE LOWER(registered_user) = $1 ORDER BY created_at DESC',
     [user.email.toLowerCase()]
   )
 
-  res.render(
-    'my-reports',
-    await sharedViewData(req, {
-      title: 'My Reports',
-      reports: result.rows,
-      userRecord: user,
-    })
-  )
+  const reports = result.rows.map((report) => ({
+    ...report,
+    reportNumber: report.report_number,
+    cardName: report.card_name,
+    cardNumber: report.card_number,
+    cardGrade: report.card_grade,
+    setName: report.set_name,
+    reportDate: report.report_date,
+    registeredUser: report.registered_user,
+    cardImage: report.card_image,
+  }))
+
+  res.render('my-reports', {
+    ...(await sharedViewData(req)),
+    title: 'My Reports',
+    reports,
+    userRecord: user,
+  })
 })
 
 app.post('/my-reports/toggle-trades', requireLogin, async (req, res) => {
@@ -249,15 +259,25 @@ app.post('/my-reports/:id/tradable', requireLogin, async (req, res) => {
 })
 
 app.get('/card-reports', async (req, res) => {
-  const result = await query(`SELECT * FROM reports ORDER BY report_date DESC NULLS LAST, id DESC`)
+  const result = await query('SELECT * FROM reports ORDER BY created_at DESC')
 
-  res.render(
-    'card-reports',
-    await sharedViewData(req, {
-      title: 'Card Reports',
-      reports: result.rows,
-    })
-  )
+  const reports = result.rows.map((report) => ({
+    ...report,
+    reportNumber: report.report_number,
+    cardName: report.card_name,
+    cardNumber: report.card_number,
+    cardGrade: report.card_grade,
+    setName: report.set_name,
+    reportDate: report.report_date,
+    registeredUser: report.registered_user,
+    cardImage: report.card_image,
+  }))
+
+  res.render('card-reports', {
+    ...(await sharedViewData(req)),
+    title: 'Card Reports',
+    reports,
+  })
 })
 
 app.get('/report/:id', async (req, res) => {
