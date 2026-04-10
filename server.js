@@ -10,35 +10,38 @@ import pg from 'pg'
 
 const { Pool } = pg
 
-// ✅ MUST COME FIRST
+// =======================
+// 🔧 PATH SETUP (FIXED)
+// =======================
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-// ✅ DEFINE PATHS BEFORE USING THEM
 const UPLOAD_ROOT = path.join(__dirname, 'uploads')
 const REPORTS_DIR = path.join(UPLOAD_ROOT, 'reports')
 
-// ✅ CREATE FOLDERS
+// CREATE FOLDERS
 fs.mkdirSync(UPLOAD_ROOT, { recursive: true })
 fs.mkdirSync(REPORTS_DIR, { recursive: true })
 fs.mkdirSync(path.join(UPLOAD_ROOT, 'cards'), { recursive: true })
 fs.mkdirSync(path.join(UPLOAD_ROOT, 'banners'), { recursive: true })
 
-// ✅ DB
+// =======================
+// 🔧 DATABASE
+// =======================
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 })
 const query = (text, params = []) => pool.query(text, params)
 
-// ✅ APP
+// =======================
+// 🔧 APP SETUP
+// =======================
 const app = express()
 const PORT = process.env.PORT || 5173
 
-// ✅ VIEW ENGINE
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
 
-// ✅ MIDDLEWARE
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
@@ -58,14 +61,18 @@ app.use((req, res, next) => {
   next()
 })
 
-// ✅ HELPERS
+// =======================
+// 🔧 HELPERS
+// =======================
 const makeId = (prefix = 'id') =>
   `${prefix}-${Date.now()}-${Math.floor(Math.random() * 100000)}`
 
 const getBaseUrl = (req) =>
   (process.env.BASE_URL || `${req.protocol}://${req.get('host')}`).replace(/\/$/, '')
 
-// ✅ EXISTING MULTER (ADMIN USE)
+// =======================
+// 🔧 MULTER (ADMIN)
+// =======================
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     let folder = 'reports'
@@ -83,7 +90,9 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage })
 
-// ✅ NEW MULTER (DESKTOP APP)
+// =======================
+// 🔧 MULTER (APP UPLOAD)
+// =======================
 const uploadStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, REPORTS_DIR)
@@ -98,27 +107,61 @@ const uploadStorage = multer.diskStorage({
 const reportUpload = multer({ storage: uploadStorage })
 
 // =======================
-// 🚀 MAIN ROUTES
+// 🏠 HOME
 // =======================
-
 app.get('/', async (req, res) => {
-  const banners = [
-    'https://images.unsplash.com/photo-1511512578047-dfb367046420',
-    'https://images.unsplash.com/photo-1518131678677-a55b72d10f5e',
-    'https://images.unsplash.com/photo-1608889175123-8ee362201f81',
-    'https://images.unsplash.com/photo-1627856013091-fed6e4e30025',
-  ]
+  res.render('home', { title: 'Home' })
+})
 
-  res.render('home', {
-    title: 'Home',
-    banners
+// =======================
+// 📊 CARD REPORTS (FIXED)
+// =======================
+app.get('/card-reports', async (req, res) => {
+  const result = await query('SELECT * FROM reports ORDER BY created_at DESC')
+
+  const reports = result.rows.map(r => ({
+    ...r,
+    reportNumber: r.report_number,
+    cardName: r.card_name,
+    cardNumber: r.card_number,
+    cardGrade: r.card_grade,
+    setName: r.set_name,
+    reportDate: r.report_date,
+    registeredUser: r.registered_user,
+    cardImage: r.card_image,
+  }))
+
+  res.render('card-reports', {
+    title: 'Card Reports',
+    reports,
   })
 })
 
 // =======================
-// 🚀 DESKTOP APP UPLOAD ROUTE (FIXED)
+// 📄 REPORT DETAIL
 // =======================
+app.get('/report/:id', async (req, res) => {
+  const result = await query(
+    `SELECT * FROM reports WHERE id = $1 OR report_number = $1 LIMIT 1`,
+    [req.params.id]
+  )
 
+  const row = result.rows[0]
+  if (!row) return res.status(404).send('Report not found')
+
+  const reportUrl = `${getBaseUrl(req)}/report/${row.id}`
+  const qr = await QRCode.toDataURL(reportUrl)
+
+  res.render('report-detail', {
+    report: row,
+    qrDataUrl: qr,
+    reportUrl,
+  })
+})
+
+// =======================
+// 🚀 DESKTOP APP UPLOAD (NEW)
+// =======================
 app.post(
   '/upload',
   reportUpload.fields([
@@ -145,7 +188,7 @@ app.post(
       const reportUrl = `${baseUrl}/uploads/reports/${htmlFile.filename}`
       const pdfUrl = `${baseUrl}/uploads/reports/${pdfFile.filename}`
 
-      console.log('UPLOAD SUCCESS:', reportNumber)
+      console.log("UPLOAD SUCCESS:", reportNumber)
 
       res.json({
         success: true,
@@ -154,7 +197,7 @@ app.post(
       })
 
     } catch (err) {
-      console.error('UPLOAD ERROR:', err)
+      console.error("UPLOAD ERROR:", err)
       res.status(500).json({ error: 'Upload failed' })
     }
   }
@@ -163,7 +206,6 @@ app.post(
 // =======================
 // 🚀 START SERVER
 // =======================
-
 app.listen(PORT, () => {
   console.log(`RUNNING ON http://localhost:${PORT}`)
 })
