@@ -489,13 +489,36 @@ app.post(
         return res.status(400).json({ error: 'Missing html_file or pdf_file' })
       }
 
-      const baseUrl = process.env.BASE_URL || `${req.protocol}://${req.get('host')}`
-      const reportUrl = `${baseUrl}/uploads/reports/${htmlFile.filename}`
-      const pdfUrl = `${baseUrl}/uploads/reports/${pdfFile.filename}`
+const htmlBuffer = fs.readFileSync(htmlFile.path)
+const pdfBuffer = fs.readFileSync(pdfFile.path)
+
+const htmlKey = `reports/${reportNumber}/index.html`
+const pdfKey = `reports/${reportNumber}/report.pdf`
+
+await s3.send(
+  new PutObjectCommand({
+    Bucket: process.env.S3_BUCKET,
+    Key: htmlKey,
+    Body: htmlBuffer,
+    ContentType: 'text/html',
+  })
+)
+
+await s3.send(
+  new PutObjectCommand({
+    Bucket: process.env.S3_BUCKET,
+    Key: pdfKey,
+    Body: pdfBuffer,
+    ContentType: 'application/pdf',
+  })
+)
+
+const htmlUrl = `https://${process.env.S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${htmlKey}`
+const pdfUrl = `https://${process.env.S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${pdfKey}`
 
       return res.json({
         success: true,
-        report_url: reportUrl,
+        report_url: htmlUrl,
         pdf_url: pdfUrl
       })
     } catch (err) {
