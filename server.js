@@ -7,7 +7,7 @@ import fs from 'fs'
 import { fileURLToPath } from 'url'
 import QRCode from 'qrcode'
 import pg from 'pg'
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
 
 const { Pool } = pg
 
