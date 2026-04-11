@@ -528,7 +528,7 @@ const pdfUrl = `https://${process.env.S3_BUCKET}.s3.${process.env.AWS_REGION}.am
 
       return res.json({
         success: true,
-        report_url: reportUrl,
+        report_url: htmlUrl,
         pdf_url: pdfUrl
       })
     } catch (err) {
