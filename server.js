@@ -7,9 +7,8 @@ import fs from 'fs'
 import { fileURLToPath } from 'url'
 import QRCode from 'qrcode'
 import pg from 'pg'
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
 
-const { Pool } = pg
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
 
 const s3 = new S3Client({
   region: process.env.AWS_REGION,
@@ -18,6 +17,9 @@ const s3 = new S3Client({
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   },
 })
+
+const { Pool } = pg
+
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 })
@@ -523,6 +525,57 @@ await s3.send(
 
 const htmlUrl = `https://${process.env.S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${htmlKey}`
 const pdfUrl = `https://${process.env.S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${pdfKey}`
+
+await query(
+  `INSERT INTO reports (
+    id,
+    report_number,
+    card_name,
+    card_number,
+    card_grade,
+    set_name,
+    report_date,
+    registered_user,
+    tradable,
+    card_image,
+    report_file,
+    notes,
+    centering,
+    corners,
+    edges,
+    surface
+  ) VALUES (
+    $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16
+  )
+  ON CONFLICT (report_number)
+  DO UPDATE SET
+    report_file = EXCLUDED.report_file,
+    report_date = EXCLUDED.report_date,
+    registered_user = EXCLUDED.registered_user,
+    notes = EXCLUDED.notes,
+    centering = EXCLUDED.centering,
+    corners = EXCLUDED.corners,
+    edges = EXCLUDED.edges,
+    surface = EXCLUDED.surface`,
+  [
+    makeId('rpt'),
+    reportNumber,
+    String(req.body.card_name || '').trim(),
+    String(req.body.card_number || '').trim(),
+    String(req.body.card_grade || '').trim(),
+    String(req.body.set_name || '').trim(),
+    String(req.body.report_date || '').trim() || null,
+    String(req.body.registered_user || '').trim(),
+    String(req.body.tradable || '').toLowerCase() === 'true',
+    String(req.body.card_image || '').trim(),
+    pdfUrl,
+    String(req.body.notes || '').trim(),
+    String(req.body.centering || '').trim(),
+    String(req.body.corners || '').trim(),
+    String(req.body.edges || '').trim(),
+    String(req.body.surface || '').trim(),
+  ]
+)
 
       return res.json({
         success: true,
