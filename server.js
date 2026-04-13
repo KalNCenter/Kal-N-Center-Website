@@ -555,9 +555,15 @@ await query(
   )
   ON CONFLICT (report_number)
   DO UPDATE SET
-    report_file = EXCLUDED.report_file,
+    card_name = EXCLUDED.card_name,
+    card_number = EXCLUDED.card_number,
+    card_grade = EXCLUDED.card_grade,
+    set_name = EXCLUDED.set_name,
     report_date = EXCLUDED.report_date,
     registered_user = EXCLUDED.registered_user,
+    tradable = EXCLUDED.tradable,
+    card_image = EXCLUDED.card_image,
+    report_file = EXCLUDED.report_file,
     notes = EXCLUDED.notes,
     centering = EXCLUDED.centering,
     corners = EXCLUDED.corners,
