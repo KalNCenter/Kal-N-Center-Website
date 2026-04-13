@@ -144,7 +144,7 @@ app.get('/', async (req, res) => {
   const content = {
     heroTitle: 'Professional card reports, collector access, and future trading tools.',
     heroSubtitle:
-      'Explore graded card reports, manage your personal collection, and test QR-linked report pages locally before going live.',
+      'Explore graded card reports and manage your personal collection.',
     companyHeading: "Kal'N-Center Website",
     companyIntro:
       "Kal'N-Center is not a replacement for PSA, CGC, Tag or other well known Trading Card Companies. Currently our focus is Pokémon Card. The services we provide are: Pre-grading, Authentication likeliness, Card Preservation, Reporting, and cataloging.",
@@ -286,7 +286,13 @@ app.post('/my-reports/:id/tradable', requireLogin, async (req, res) => {
 })
 
 app.get('/card-reports', async (req, res) => {
-  const result = await query('SELECT * FROM reports ORDER BY created_at DESC')
+  const result = await query(`
+  SELECT r.*, u.username
+  FROM reports r
+  LEFT JOIN users u
+  ON LOWER(r.registered_user) = LOWER(u.email)
+  ORDER BY r.created_at DESC
+`)
 
   const reports = result.rows.map((report) => ({
     ...report,
@@ -296,7 +302,7 @@ app.get('/card-reports', async (req, res) => {
     cardGrade: report.card_grade,
     setName: report.set_name,
     reportDate: report.report_date,
-    registeredUser: report.registered_user,
+    registeredUser: report.username || '',
     cardImage: report.card_image,
   }))
 

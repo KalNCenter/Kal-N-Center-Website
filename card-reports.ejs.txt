@@ -1,0 +1,43 @@
+<%- include('partials/header') %>
+<section class="panel table-panel">
+  <div class="section-head"><div><h2>Card Reports</h2><p class="muted">Public report list with tradable status.</p></div></div>
+  <div class="table-wrap">
+    <table>
+<input type="text" id="searchInput" placeholder="Search reports..." style="margin-bottom:10px; padding:8px; width:300px;">
+      <thead><tr><th>Image</th>
+<th>Report Number</th>
+<th>Card Name</th>
+<th>Card Number</th>
+<th>Card Grade</th>
+<th>Card Set Name</th>
+<th>Report Date</th>
+<th>Registered User</th>
+<th>Tradable</th>
+
+<% if (currentUser) { %>
+  <td><%= report.card_category || '' %></td>
+  <td><%= report.pokemon_type || '' %></td>
+  <td><%= report.pokemon_generation || '' %></td>
+  <td><%= report.pokemon_region || '' %></td>
+<% } %></tr></thead>
+      <tbody>
+        <% reports.forEach(function(report) { %>
+          <tr>
+            <td><img class="thumb" src="<%= report.cardImage || 'https://placehold.co/60x80?text=Card' %>" alt="<%= report.cardName %>" /></td>
+            <td><a href="/report/<%= report.id %>"><%= report.reportNumber %></a></td>
+            <td><%= report.cardName %></td><td><%= report.cardNumber %></td><td><%= report.cardGrade %></td><td><%= report.setName %></td><td><%= report.reportDate ? new Date(report.reportDate).toLocaleDateString() : '' %></td><td><%= report.registeredUser %></td><td><%= report.tradable ? 'Yes' : 'No' %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+<script>
+document.getElementById('searchInput').addEventListener('keyup', function () {
+  const value = this.value.toLowerCase()
+  document.querySelectorAll('tbody tr').forEach(row => {
+    row.style.display = row.innerText.toLowerCase().includes(value) ? '' : 'none'
+  })
+})
+</script>
+</section>
+<%- include('partials/footer') %>
