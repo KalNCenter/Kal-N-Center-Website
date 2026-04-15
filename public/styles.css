@@ -20,3 +20,26 @@
 .report-header{display:grid;grid-template-columns:280px 1fr;gap:22px;align-items:start}.report-card-image{width:100%;max-width:280px;border-radius:18px;box-shadow:0 10px 24px rgba(15,23,42,.12)}.report-meta p{margin:0 0 10px}.qr-image{width:220px;max-width:100%;border-radius:14px;border:1px solid var(--border);background:white;padding:12px}.qr-url{font-size:.92rem;color:var(--muted);word-break:break-all}.narrow{max-width:700px}.admin-form{display:grid;gap:20px}
 @media (max-width:1100px){.grid.two,.grid.three,.grid.four,.contact-grid,.report-grid{grid-template-columns:1fr}}
 @media (max-width:900px){body{display:block}.sidebar{width:100%}.page-wrap,.topbar{padding-left:16px;padding-right:16px}.hero-content{padding:24px;min-height:360px}.hero-slider{min-height:360px}.form-grid{grid-template-columns:1fr}.report-header{grid-template-columns:1fr}}
+.badge-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.badge-row img {
+  height: 60px;
+  border-radius: 8px;
+  transition: transform 0.2s ease;
+}
+
+.badge-row img:hover {
+  transform: scale(1.1);
+}
+.badge-row img {
+  height: 60px;
+  border-radius: 10px;
+  padding: 4px;
+  background: #111;
+  box-shadow: 0 0 10px rgba(255,255,255,0.15);
+}
