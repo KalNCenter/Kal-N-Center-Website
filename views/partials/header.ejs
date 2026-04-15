@@ -10,7 +10,7 @@
   <aside class="sidebar">
     <div class="brand-card">
       <h2><%= siteName %></h2>
-      <p>Local test build with Pokémon Center styling.</p>
+      <p>Track your collection and achievements.</p>
     </div>
     <nav class="nav-list">
       <a class="nav-link <%= currentPath === '/' ? 'active' : '' %>" href="/"><%= navLabels.home %></a>
@@ -22,18 +22,14 @@
       <% } %>
     </nav>
     <div class="sidebar-note">
-      <% if (isAdmin) { %>
-        Admin tools are enabled.
-      <% } else { %>
-        Log in as admin to upload reports and test QR-linked pages.
-      <% } %>
-    </div>
+  Build your collection. Unlock achievements.
+</div>
   </aside>
   <main class="main-column">
     <header class="topbar">
       <div>
         <h1 class="top-title"><%= siteName %></h1>
-        <div class="top-subtitle">Pokémon Center themed local test version</div>
+        <div class="top-subtitle">PRE-GRADING & NOVELTY SLABS</div>
       </div>
       <div class="top-actions">
         <% if (currentUser) { %>
