@@ -74,7 +74,60 @@ const getCurrentUser = async (req) => {
 
   return result.rows[0] || null
 }
+const BADGES = JSON.parse(
+  fs.readFileSync(path.join(__dirname, 'badges.json'), 'utf-8')
+);
 
+async function checkAndUnlockBadges(userEmail) {
+  const reports = await query(
+    'SELECT * FROM reports WHERE LOWER(registered_user) = LOWER($1)',
+    [userEmail]
+  );
+
+  const rows = reports.rows;
+
+  for (const badge of BADGES.badges) {
+    const rule = badge.rule;
+
+    let unlocked = false;
+
+    if (rule.type === 'total_reports_count') {
+      unlocked = rows.length >= rule.count;
+    }
+
+    if (rule.type === 'field_count') {
+      const count = rows.filter(r =>
+        (r[rule.field] || '').toLowerCase() === rule.value.toLowerCase()
+      ).length;
+      unlocked = count >= rule.count;
+    }
+
+    if (rule.type === 'unique_field_count') {
+      const unique = new Set(
+        rows.map(r => (r[rule.field] || '').toLowerCase())
+      );
+      unlocked = unique.size >= rule.count;
+    }
+
+    if (rule.type === 'field_count_in') {
+      const count = rows.filter(r =>
+        rule.values.some(v =>
+          (r[rule.field] || '').toLowerCase().includes(v.toLowerCase())
+        )
+      ).length;
+      unlocked = count >= rule.count;
+    }
+
+    if (unlocked) {
+      await query(
+        `INSERT INTO user_badges (user_email, badge_key)
+         VALUES ($1, $2)
+         ON CONFLICT DO NOTHING`,
+        [userEmail, badge.key]
+      );
+    }
+  }
+}
 const sharedViewData = async (req, extra = {}) => {
   const user = await getCurrentUser(req)
 
@@ -195,7 +248,23 @@ app.post('/logout', (req, res) => {
     res.redirect('/')
   })
 })
+app.get('/my-badges', requireLogin, async (req, res) => {
+  const user = await getCurrentUser(req);
 
+  const unlocked = await query(
+    'SELECT badge_key FROM user_badges WHERE LOWER(user_email) = LOWER($1)',
+    [user.email]
+  );
+
+  const unlockedKeys = unlocked.rows.map(r => r.badge_key);
+
+  res.render('my-badges', {
+    ...(await sharedViewData(req)),
+    title: 'My Badges',
+    badges: BADGES.badges,
+    unlocked: unlockedKeys
+  });
+});
 app.get('/signup', async (req, res) => {
   res.render('signup', await sharedViewData(req, { title: 'New Account' }))
 })
@@ -252,12 +321,23 @@ app.get('/my-reports', requireLogin, async (req, res) => {
     registeredUser: report.registered_user,
     cardImage: report.card_image,
   }))
+const unlocked = await query(
+  'SELECT badge_key FROM user_badges WHERE LOWER(user_email) = LOWER($1) ORDER BY unlocked_at DESC LIMIT 5',
+  [user.email]
+);
 
+const unlockedKeys = unlocked.rows.map(r => r.badge_key);
+
+const recentBadges = unlockedKeys
+  .map(key => BADGES.badges.find(b => b.key === key))
+  .filter(Boolean);
+);
   res.render('my-reports', {
     ...(await sharedViewData(req)),
     title: 'My Reports',
     reports,
     userRecord: user,
+    recentBadges,
   })
 })
 
@@ -588,7 +668,9 @@ await query(
     String(req.body.surface || '').trim(),
   ]
 )
-
+if (req.body.registered_user) {
+  await checkAndUnlockBadges(req.body.registered_user);
+}
       return res.json({
         success: true,
         report_url: htmlUrl,

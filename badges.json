@@ -1,0 +1,269 @@
+{
+  "badges": [
+    {
+      "file": "scan_10_different_pokemon.png",
+      "key": "scan_10_different_pokemon",
+      "title": "10 Different Pokémon",
+      "unlock_condition": "Unlocks when 10 reports are uploaded with different Pokémon names in the card name category"
+    },
+    {
+      "file": "scan_25_different_pokemon.png",
+      "key": "scan_25_different_pokemon",
+      "title": "25 Different Pokémon",
+      "unlock_condition": "Unlocks when 25 reports are uploaded with different Pokémon names in the card name category"
+    },
+    {
+      "file": "scan_50_different_pokemon.png",
+      "key": "scan_50_different_pokemon",
+      "title": "50 Different Pokémon",
+      "unlock_condition": "Unlocks when 50 reports are uploaded with different Pokémon names in the card name category"
+    },
+    {
+      "file": "scan_10_pokemon.png",
+      "key": "scan_10_pokemon",
+      "title": "10 Pokémon",
+      "unlock_condition": "Unlocks when 10 reports are uploaded with 'Pokémon' in the card type category"
+    },
+    {
+      "file": "scan_25_pokemon.png",
+      "key": "scan_25_pokemon",
+      "title": "25 Pokémon",
+      "unlock_condition": "Unlocks when 25 reports are uploaded with 'Pokémon' in the card type category"
+    },
+    {
+      "file": "scan_5_charizard.png",
+      "key": "scan_5_charizard",
+      "title": "5 Charizard",
+      "unlock_condition": "Unlocks when 5 reports are uploaded with 'Charizard' in the card name category"
+    },
+    {
+      "file": "scan_25_charizard.png",
+      "key": "scan_25_charizard",
+      "title": "25 Charizard",
+      "unlock_condition": "Unlocks when 25 reports are uploaded with 'Charizard' in the card name category"
+    },
+    {
+      "file": "scan_50_charizard.png",
+      "key": "scan_50_charizard",
+      "title": "50 Charizard",
+      "unlock_condition": "Unlocks when 50 reports are uploaded with 'Charizard' in the card name category"
+    },
+    {
+      "file": "scan_5_mewtwo.png",
+      "key": "scan_5_mewtwo",
+      "title": "5 Mewtwo",
+      "unlock_condition": "Unlocks when 5 reports are uploaded with 'Mewtwo' in the card name category"
+    },
+    {
+      "file": "scan_25_mewtwo.png",
+      "key": "scan_25_mewtwo",
+      "title": "25 Mewtwo",
+      "unlock_condition": "Unlocks when 25 reports are uploaded with 'Mewtwo' in the card name category"
+    },
+    {
+      "file": "scan_50_mewtwo.png",
+      "key": "scan_50_mewtwo",
+      "title": "50 Mewtwo",
+      "unlock_condition": "Unlocks when 50 reports are uploaded with 'Mewtwo' in the card name category"
+    },
+    {
+      "file": "scan_1_grade_10.png",
+      "key": "scan_1_grade_10",
+      "title": "1 Grade 10",
+      "unlock_condition": "Unlocks when 1 report is uploaded with a grade of 10"
+    },
+    {
+      "file": "scan_5_grade_10.png",
+      "key": "scan_5_grade_10",
+      "title": "5 Grade 10",
+      "unlock_condition": "Unlocks when 5 reports are uploaded with a grade of 10"
+    },
+    {
+      "file": "scan_10_grade_10.png",
+      "key": "scan_10_grade_10",
+      "title": "10 Grade 10",
+      "unlock_condition": "Unlocks when 10 reports are uploaded with a grade of 10"
+    },
+    {
+      "file": "scan_25_grade_10.png",
+      "key": "scan_25_grade_10",
+      "title": "25 Grade 10",
+      "unlock_condition": "Unlocks when 10 reports are uploaded with a grade of 10"
+    },
+
+    {
+      "file": "scan_10_water.png",
+      "key": "scan_10_water",
+      "title": "10 Water Pokémon",
+      "unlock_condition": "Unlocks when 10 reports are uploaded with 'Water' in the Pokémon Type category"
+    },
+    {
+      "file": "scan_10_fire.png",
+      "key": "scan_10_fire",
+      "title": "10 Fire Pokémon",
+      "unlock_condition": "Unlocks when 10 reports are uploaded with 'Fire' in the Pokémon Type category"
+    },
+    {
+      "file": "scan_10_grass.png",
+      "key": "scan_10_grass",
+      "title": "10 Grass Pokémon",
+      "unlock_condition": "Unlocks when 10 reports are uploaded with 'Grass' in the Pokémon Type category"
+    },
+    {
+      "file": "scan_10_electric.png",
+      "key": "scan_10_electric",
+      "title": "10 Electric Pokémon",
+      "unlock_condition": "Unlocks when 10 reports are uploaded with 'Electric' in the Pokémon Type category"
+    },
+    {
+      "file": "scan_10_fighting.png",
+      "key": "scan_10_water",
+      "title": "10 Water Pokémon",
+      "unlock_condition": "Unlocks when 10 reports are uploaded with 'Water' in the Pokémon Type category"
+    },
+    {
+      "file": "scan_10_dark.png",
+      "key": "scan_10_fire",
+      "title": "10 Fire Pokémon",
+      "unlock_condition": "Unlocks when 10 reports are uploaded with 'Fire' in the Pokémon Type category"
+    },
+    {
+      "file": "scan_10_metal.png",
+      "key": "scan_10_grass",
+      "title": "10 Grass Pokémon",
+      "unlock_condition": "Unlocks when 10 reports are uploaded with 'Grass' in the Pokémon Type category"
+    },
+    {
+      "file": "scan_10_fairy.png",
+      "key": "scan_10_electric",
+      "title": "10 Electric Pokémon",
+      "unlock_condition": "Unlocks when 10 reports are uploaded with 'Electric' in the Pokémon Type category"
+    },
+    {
+      "file": "scan_10_dragon.png",
+      "key": "scan_10_electric",
+      "title": "10 Electric Pokémon",
+      "unlock_condition": "Unlocks when 10 reports are uploaded with 'Electric' in the Pokémon Type category"
+    },
+    {
+      "file": "scan_10_psychic.png",
+      "key": "scan_10_psychic",
+      "title": "10 Psychic Pokémon",
+      "unlock_condition": "Unlocks when 10 reports are uploaded with 'Psychic' in the Pokémon Type category"
+    },
+    {
+      "file": "scan_25_water.png",
+      "key": "scan_25_water",
+      "title": "25 Water Pokémon",
+      "unlock_condition": "Unlocks when 25 reports are uploaded with 'Water' in the Pokémon Type category"
+    },
+    {
+      "file": "scan_25_fire.png",
+      "key": "scan_25_fire",
+      "title": "25 Fire Pokémon",
+      "unlock_condition": "Unlocks when 25 reports are uploaded with 'Fire' in the Pokémon Type category"
+    },
+    {
+      "file": "scan_25_grass.png",
+      "key": "scan_25_grass",
+      "title": "25 Grass Pokémon",
+      "unlock_condition": "Unlocks when 25 reports are uploaded with 'Grass' in the Pokémon Type category"
+    },
+    {
+      "file": "scan_25_electric.png",
+      "key": "scan_25_electric",
+      "title": "25 Electric Pokémon",
+      "unlock_condition": "Unlocks when 25 reports are uploaded with 'Electric' in the Pokémon Type category"
+    },
+    {
+      "file": "scan_25_fighting.png",
+      "key": "scan_25_fighting",
+      "title": "25 Fighting Pokémon",
+      "unlock_condition": "Unlocks when 25 reports are uploaded with 'Fighting' in the Pokémon Type category"
+    },
+    {
+      "file": "scan_25_dark.png",
+      "key": "scan_25_dark",
+      "title": "25 Dark Pokémon",
+      "unlock_condition": "Unlocks when 25 reports are uploaded with 'Dark' in the Pokémon Type category"
+    },
+    {
+      "file": "scan_25_metal.png",
+      "key": "scan_25_metal",
+      "title": "25 Metal Pokémon",
+      "unlock_condition": "Unlocks when 25 reports are uploaded with 'Metal' in the Pokémon Type category"
+    },
+    {
+      "file": "scan_25_fairy.png",
+      "key": "scan_25_fairy",
+      "title": "25 Fairy Pokémon",
+      "unlock_condition": "Unlocks when 25 reports are uploaded with 'Fairy' in the Pokémon Type category"
+    },
+    {
+      "file": "scan_25_dragon.png",
+      "key": "scan_25_dragon",
+      "title": "25 Dragon Pokémon",
+      "unlock_condition": "Unlocks when 25 reports are uploaded with 'Dragon' in the Pokémon Type category"
+    },
+    {
+      "file": "scan_25_psychic.png",
+      "key": "scan_25_psychic",
+      "title": "25 Psychic Pokémon",
+      "unlock_condition": "Unlocks when 25 reports are uploaded with 'Psychic' in the Pokémon Type category"
+    },
+    {
+      "file": "scan_5_cards.png",
+      "key": "scan_5",
+      "title": "5 Cards",
+      "unlock_condition": "Unlocks when 5 reports are uploaded"
+    },
+    {
+      "file": "scan_10_cards.png",
+      "key": "scan_10",
+      "title": "10 Cards",
+      "unlock_condition": "Unlocks when 10 reports are uploaded"
+    },
+    {
+      "file": "scan_25_cards.png",
+      "key": "scan_25",
+      "title": "25 Cards",
+      "unlock_condition": "Unlocks when 25 reports are uploaded"
+    },
+    {
+      "file": "scan_50_cards.png",
+      "key": "scan_50",
+      "title": "50 Cards",
+      "unlock_condition": "Unlocks when 50 reports are uploaded"
+    },
+    {
+      "file": "scan_100_cards.png",
+      "key": "scan_100",
+      "title": "100 Cards",
+      "unlock_condition": "Unlocks when 100 reports are uploaded"
+    },
+    {
+      "file": "scan_5_energy.png",
+      "key": "scan_5_energy",
+      "title": "Share Your Energy with ME",
+      "unlock_condition": "Unlocks when 5 reports are uploaded with 'Energy' in the card type category"
+    },
+    {
+      "file": "scan_10_energy.png",
+      "key": "scan_10_energy",
+      "title": "GIVE ME ALL OF YOUR ENERGY",
+      "unlock_condition": "Unlocks when 10 reports are uploaded with 'Energy' in the card type category"
+    },
+    {
+      "file": "scan_5_trainers.png",
+      "key": "scan_5_trainers",
+      "title": "Student",
+      "unlock_condition": "Unlocks when 5 reports are uploaded with 'Trainer' in the card type category"
+    },
+    {
+      "file": "scan_15_trainers.png",
+      "key": "scan_15_trainers",
+      "title": "Teacher",
+      "unlock_condition": "Unlocks when 15 reports are uploaded with 'Trainer' in the card type category"
+    }
+  ]
+}
