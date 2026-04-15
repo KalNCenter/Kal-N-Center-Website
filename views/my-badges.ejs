@@ -1,0 +1,19 @@
+<%- include('partials/header') %>
+
+<h2>My Badges</h2>
+
+<div class="badge-grid">
+  <% badges.forEach(badge => { %>
+    <div class="badge-card <%= unlocked.includes(badge.key) ? 'unlocked' : 'locked' %>">
+      <% if (unlocked.includes(badge.key)) { %>
+        <img src="/badges/<%= badge.file %>" />
+        <p><%= badge.title %></p>
+      <% } else { %>
+        <div class="locked-badge">🔒</div>
+        <p>Locked</p>
+      <% } %>
+    </div>
+  <% }) %>
+</div>
+
+<%- include('partials/footer') %>

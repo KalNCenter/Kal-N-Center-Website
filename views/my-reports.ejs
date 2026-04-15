@@ -1,27 +1,81 @@
 <%- include('partials/header') %>
+
 <section class="section-head">
-  <div><h2>My Reports</h2><p class="muted">Reports registered under: <%= userRecord.email %></p></div>
+  <div>
+    <h2>My Reports</h2>
+    <p class="muted">Reports registered under: <%= userRecord.email %></p>
+  </div>
+
   <div class="trade-box">
-    <div><strong>Trade Menu</strong><div class="muted">Enable or disable trading for your report list.</div></div>
-    <form action="/my-reports/toggle-trades" method="post"><button class="btn <%= userRecord.tradeEnabled ? 'btn-dark' : 'btn-light' %>" type="submit">Trades <%= userRecord.tradeEnabled ? 'Enabled' : 'Disabled' %></button></form>
+    <div>
+      <strong>Trade Menu</strong>
+      <div class="muted">Enable or disable trading for your report list.</div>
+    </div>
+    <form action="/my-reports/toggle-trades" method="post">
+      <button class="btn <%= userRecord.tradeEnabled ? 'btn-dark' : 'btn-light' %>" type="submit">
+        Trades <%= userRecord.tradeEnabled ? 'Enabled' : 'Disabled' %>
+      </button>
+    </form>
   </div>
 </section>
+
+<section class="panel">
+  <h3>Recent Badges</h3>
+  <div class="badge-row">
+    <% if (recentBadges && recentBadges.length) { %>
+      <% recentBadges.forEach(b => { %>
+        <img src="/badges/<%= b.file %>" alt="<%= b.title %>" style="height:60px; margin-right:8px;" />
+      <% }) %>
+    <% } else { %>
+      <p class="muted">No badges unlocked yet.</p>
+    <% } %>
+  </div>
+</section>
+
 <section class="panel table-panel">
   <div class="table-wrap">
     <table>
-      <thead><tr><% if (userRecord.tradeEnabled) { %><th>Trade</th><% } %><th>Image</th><th>Report Number</th><th>Card Name</th><th>Card Number</th><th>Card Grade</th><th>Card Set Name</th><th>Report Date</th><th>Registered User</th></tr></thead>
+      <thead>
+        <tr>
+          <% if (userRecord.tradeEnabled) { %><th>Trade</th><% } %>
+          <th>Image</th>
+          <th>Report Number</th>
+          <th>Card Name</th>
+          <th>Card Number</th>
+          <th>Card Grade</th>
+          <th>Card Set Name</th>
+          <th>Report Date</th>
+          <th>Registered User</th>
+        </tr>
+      </thead>
       <tbody>
-        <% if (!reports.length) { %><tr><td class="empty" colspan="<%= userRecord.tradeEnabled ? 9 : 8 %>">No reports found.</td></tr><% } %>
+        <% if (!reports.length) { %>
+          <tr>
+            <td class="empty" colspan="<%= userRecord.tradeEnabled ? 9 : 8 %>">No reports found.</td>
+          </tr>
+        <% } %>
         <% reports.forEach(function(report) { %>
           <tr>
-            <% if (userRecord.tradeEnabled) { %><td><form action="/my-reports/<%= report.id %>/tradable" method="post"><input type="checkbox" name="tradable" <%= report.tradable ? 'checked' : '' %> onchange="this.form.submit()" /></form></td><% } %>
+            <% if (userRecord.tradeEnabled) { %>
+              <td>
+                <form action="/my-reports/<%= report.id %>/tradable" method="post">
+                  <input type="checkbox" name="tradable" <%= report.tradable ? 'checked' : '' %> onchange="this.form.submit()" />
+                </form>
+              </td>
+            <% } %>
             <td><img class="thumb" src="<%= report.cardImage || 'https://placehold.co/60x80?text=Card' %>" alt="<%= report.cardName %>" /></td>
             <td><a href="/report/<%= report.id %>"><%= report.reportNumber %></a></td>
-            <td><%= report.cardName %></td><td><%= report.cardNumber %></td><td><%= report.cardGrade %></td><td><%= report.setName %></td><td><%= report.reportDate %></td><td><%= report.registeredUser %></td>
+            <td><%= report.cardName %></td>
+            <td><%= report.cardNumber %></td>
+            <td><%= report.cardGrade %></td>
+            <td><%= report.setName %></td>
+            <td><%= report.reportDate %></td>
+            <td><%= report.registeredUser %></td>
           </tr>
         <% }) %>
       </tbody>
     </table>
   </div>
 </section>
+
 <%- include('partials/footer') %>
