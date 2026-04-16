@@ -366,7 +366,7 @@ res.render('my-reports', {
   reports,
   userRecord: user,
   recentBadges,
-});
+})
 })
 
 app.post('/my-reports/toggle-trades', requireLogin, async (req, res) => {
