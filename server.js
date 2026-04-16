@@ -393,15 +393,14 @@ app.post('/my-reports/:id/tradable', requireLogin, async (req, res) => {
   res.redirect('/my-reports')
 })
 
-const result = await query(
-  `SELECT r.*, u.username
-   FROM reports r
-   LEFT JOIN users u
-   ON LOWER(r.registered_user) = LOWER(u.email)
-   WHERE r.id = $1 OR r.report_number = $1
-   LIMIT 1`,
-  [req.params.id]
-)
+app.get('/card-reports', async (req, res) => {
+  const result = await query(`
+    SELECT r.*, u.username
+    FROM reports r
+    LEFT JOIN users u
+    ON LOWER(r.registered_user) = LOWER(u.email)
+    ORDER BY r.created_at DESC
+  `)
 
   const reports = result.rows.map((report) => ({
     ...report,
