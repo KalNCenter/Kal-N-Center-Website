@@ -21,47 +21,51 @@
       <thead>
         <tr>
           <th>Image</th>
-          <th>Report #</th>
           <th>Card Name</th>
-          <th>Card #</th>
           <th>Card Grade</th>
+          <th>Card #</th>
           <th>Card Set Name</th>
           <th>Report Date</th>
+          <th>Report #</th>
           <th>Registered User</th>
-          <th>Tradeable</th>
-          <% if (currentUser) { %>
-            <th>Card Type</th>
-            <th>Pokémon Type</th>
-            <th>Pokémon Generation</th>
-            <th>Pokémon Region</th>
-          <% } %>
         </tr>
       </thead>
       <tbody>
         <% reports.forEach(function(report) { %>
-          <tr>
-            <td>
-              <img
-                class="thumb"
-                src="<%= report.cardImage || 'https://placehold.co/60x80?text=Card' %>"
-                alt="<%= report.cardName || 'Card image' %>"
-              />
-            </td>
-            <td><a href="/report/<%= report.id %>"><%= report.reportNumber %></a></td>
-            <td><%= report.cardName || '' %></td>
-            <td><%= report.cardNumber || '' %></td>
-            <td><%= report.cardGrade || '' %></td>
-            <td><%= report.setName || '' %></td>
-            <td><%= report.reportDate ? new Date(report.reportDate).toLocaleDateString() : '' %></td>
-            <td><%= report.registeredUser || '' %></td>
-            <td><%= report.tradable ? 'Yes' : 'No' %></td>
-            <% if (currentUser) { %>
-              <td><%= report.card_category || '' %></td>
-              <td><%= report.pokemon_type || '' %></td>
-              <td><%= report.pokemon_generation || '' %></td>
-              <td><%= report.pokemon_region || '' %></td>
-            <% } %>
-          </tr>
+<tr>
+  <!-- Image -->
+<td>
+  <a href="/report/<%= report.id %>">
+    <img
+      class="thumb"
+      src="<%= report.cardImage || 'https://placehold.co/60x80?text=Card' %>"
+      alt="<%= report.cardName || 'Card image' %>"
+    />
+  </a>
+</td>
+
+  <!-- Card Name -->
+  <td><%= report.cardName || '' %></td>
+
+  <!-- Card Grade -->
+  <td><%= report.cardGrade || '' %></td>
+
+  <!-- Card # -->
+  <td><%= report.cardNumber || '' %></td>
+
+  <!-- Card Set Name -->
+  <td><%= report.setName || '' %></td>
+
+  <!-- Report Date -->
+  <td><%= report.reportDate ? new Date(report.reportDate).toLocaleDateString() : '' %></td>
+
+  <!-- Report # -->
+  <td><a href="/report/<%= report.id %>"><%= report.reportNumber %></a></td>
+
+  <!-- Registered User -->
+  <td><%= report.registeredUser || '' %></td>
+
+</tr>
         <% }) %>
       </tbody>
     </table>

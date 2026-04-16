@@ -1,22 +1,40 @@
 <%- include('partials/header') %>
+
 <section class="grid report-grid">
   <div class="panel">
     <h2><%= report.reportNumber %></h2>
     <div class="report-header">
-      <img class="report-card-image" src="<%= report.cardImage || 'https://placehold.co/300x420?text=Card' %>" alt="<%= report.cardName %>" />
+      <img
+        class="report-card-image"
+        src="<%= report.cardImage || 'https://placehold.co/300x420?text=Card' %>"
+        alt="<%= report.cardName || 'Card image' %>"
+      />
+
       <div class="report-meta">
-        <p><strong>Card Name:</strong> <%= report.cardName %></p>
-        <p><strong>Card Number:</strong> <%= report.cardNumber %></p>
-        <p><strong>Grade:</strong> <%= report.cardGrade %></p>
-        <p><strong>Set Name:</strong> <%= report.setName %></p>
-        <p><strong>Report Date:</strong> <%= report.reportDate %></p>
-        <p><strong>Registered User:</strong> <%= report.registeredUser %></p>
-        <p><strong>Tradable:</strong> <%= report.tradable ? 'Yes' : 'No' %></p>
-        <% if (report.notes) { %><p><strong>Notes:</strong> <%= report.notes %></p><% } %>
-        <% if (report.reportFile) { %><p><a class="btn btn-dark" href="<%= report.reportFile %>" target="_blank" rel="noreferrer">Open Uploaded Report File</a></p><% } %>
+        <p><strong>Card Name:</strong> <%= report.cardName || '' %></p>
+        <p><strong>Card Number:</strong> <%= report.cardNumber || '' %></p>
+        <p><strong>Grade:</strong> <%= report.cardGrade || '' %></p>
+        <p><strong>Set Name:</strong> <%= report.setName || '' %></p>
+        <p><strong>Card Type:</strong> <%= report.card_category || '' %></p>
+        <p><strong>Pokémon Type:</strong> <%= report.pokemon_type || '' %></p>
+        <p><strong>Report Date:</strong> <%= report.reportDate ? new Date(report.reportDate).toLocaleDateString() : '' %></p>
+        <p><strong>Registered User:</strong> <%= report.registeredUser || '' %></p>
+
+        <% if (report.notes) { %>
+          <p><strong>Notes:</strong> <%= report.notes %></p>
+        <% } %>
+
+        <% if (report.reportFile) { %>
+          <p>
+            <a class="btn btn-dark" href="<%= report.reportFile %>" target="_blank" rel="noreferrer">
+              Open Uploaded Report File
+            </a>
+          </p>
+        <% } %>
       </div>
     </div>
   </div>
+
   <div class="panel accent-blue">
     <h3>QR Code</h3>
     <p class="muted">Scan this QR code to open this report page.</p>
@@ -24,6 +42,7 @@
     <p class="qr-url"><%= reportUrl %></p>
   </div>
 </section>
+
 <section class="panel">
   <h3>Subgrades</h3>
   <div class="grid four">
@@ -33,4 +52,5 @@
     <div class="subgrade-box"><strong>Surface</strong><span><%= report.subgrades?.surface || '-' %></span></div>
   </div>
 </section>
+
 <%- include('partials/footer') %>

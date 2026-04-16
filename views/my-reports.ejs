@@ -5,18 +5,6 @@
     <h2>My Reports</h2>
     <p class="muted">Reports registered under: <%= userRecord.email %></p>
   </div>
-
-  <div class="trade-box">
-    <div>
-      <strong>Trade Menu</strong>
-      <div class="muted">Enable or disable trading for your report list.</div>
-    </div>
-    <form action="/my-reports/toggle-trades" method="post">
-      <button class="btn <%= userRecord.tradeEnabled ? 'btn-dark' : 'btn-light' %>" type="submit">
-        Trades <%= userRecord.tradeEnabled ? 'Enabled' : 'Disabled' %>
-      </button>
-    </form>
-  </div>
 </section>
 
 <section class="panel">
@@ -37,40 +25,43 @@
     <table>
       <thead>
         <tr>
-          <% if (userRecord.tradeEnabled) { %><th>Trade</th><% } %>
           <th>Image</th>
-          <th>Report Number</th>
           <th>Card Name</th>
-          <th>Card Number</th>
           <th>Card Grade</th>
+          <th>Card Number</th>
           <th>Card Set Name</th>
+          <th>Card Type</th>
+          <th>Pokémon Type</th>
           <th>Report Date</th>
-          <th>Registered User</th>
+          <th>Report Number</th>
         </tr>
       </thead>
       <tbody>
         <% if (!reports.length) { %>
           <tr>
-            <td class="empty" colspan="<%= userRecord.tradeEnabled ? 9 : 8 %>">No reports found.</td>
+            <td class="empty" colspan="9">No reports found.</td>
           </tr>
         <% } %>
+
         <% reports.forEach(function(report) { %>
           <tr>
-            <% if (userRecord.tradeEnabled) { %>
-              <td>
-                <form action="/my-reports/<%= report.id %>/tradable" method="post">
-                  <input type="checkbox" name="tradable" <%= report.tradable ? 'checked' : '' %> onchange="this.form.submit()" />
-                </form>
-              </td>
-            <% } %>
-            <td><img class="thumb" src="<%= report.cardImage || 'https://placehold.co/60x80?text=Card' %>" alt="<%= report.cardName %>" /></td>
-            <td><a href="/report/<%= report.id %>"><%= report.reportNumber %></a></td>
-            <td><%= report.cardName %></td>
-            <td><%= report.cardNumber %></td>
-            <td><%= report.cardGrade %></td>
-            <td><%= report.setName %></td>
-            <td><%= report.reportDate %></td>
-            <td><%= report.registeredUser %></td>
+<td>
+  <a href="/report/<%= report.id %>">
+    <img
+      class="thumb"
+      src="<%= report.cardImage || 'https://placehold.co/60x80?text=Card' %>"
+      alt="<%= report.cardName || 'Card image' %>"
+    />
+  </a>
+</td>
+            <td><%= report.cardName || '' %></td>
+            <td><%= report.cardGrade || '' %></td>
+            <td><%= report.cardNumber || '' %></td>
+            <td><%= report.setName || '' %></td>
+            <td><%= report.card_category || '' %></td>
+            <td><%= report.pokemon_type || '' %></td>
+            <td><%= report.reportDate ? new Date(report.reportDate).toLocaleDateString() : '' %></td>
+            <td><a href="/report/<%= report.id %>"><%= report.reportNumber || '' %></a></td>
           </tr>
         <% }) %>
       </tbody>
