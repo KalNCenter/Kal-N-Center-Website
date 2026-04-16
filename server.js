@@ -88,7 +88,6 @@ async function checkAndUnlockBadges(userEmail) {
 
   for (const badge of BADGES.badges) {
     const rule = badge.rule;
-
     let unlocked = false;
 
     if (rule.type === 'total_reports_count') {
@@ -97,24 +96,53 @@ async function checkAndUnlockBadges(userEmail) {
 
     if (rule.type === 'field_count') {
       const count = rows.filter(r =>
-        (r[rule.field] || '').toLowerCase() === rule.value.toLowerCase()
+        String(r[rule.field] || '').toLowerCase() === String(rule.value || '').toLowerCase()
       ).length;
       unlocked = count >= rule.count;
     }
 
     if (rule.type === 'unique_field_count') {
       const unique = new Set(
-        rows.map(r => (r[rule.field] || '').toLowerCase())
+        rows
+          .map(r => String(r[rule.field] || '').toLowerCase().trim())
+          .filter(Boolean)
       );
       unlocked = unique.size >= rule.count;
     }
 
     if (rule.type === 'field_count_in') {
       const count = rows.filter(r =>
-        rule.values.some(v =>
-          (r[rule.field] || '').toLowerCase().includes(v.toLowerCase())
+        (rule.values || []).some(v =>
+          String(r[rule.field] || '').toLowerCase().includes(String(v).toLowerCase())
         )
       ).length;
+      unlocked = count >= rule.count;
+    }
+
+    if (rule.type === 'field_contains_count') {
+      const count = rows.filter(r =>
+        String(r[rule.field] || '').toLowerCase().includes(String(rule.value || '').toLowerCase())
+      ).length;
+      unlocked = count >= rule.count;
+    }
+
+    if (rule.type === 'numeric_field_count') {
+      const count = rows.filter(r => {
+        const raw = r[rule.field];
+        if (raw === null || raw === undefined || raw === '') return false;
+        const num = Number(raw);
+        return !Number.isNaN(num) && num === Number(rule.value);
+      }).length;
+      unlocked = count >= rule.count;
+    }
+
+    if (rule.type === 'field_count_in_exact') {
+      const allowed = (rule.values || []).map(v => String(v).toLowerCase());
+
+      const count = rows.filter(r =>
+        allowed.includes(String(r[rule.field] || '').toLowerCase())
+      ).length;
+
       unlocked = count >= rule.count;
     }
 
@@ -395,7 +423,12 @@ app.get('/card-reports', async (req, res) => {
 
 app.get('/report/:id', async (req, res) => {
   const result = await query(
-    `SELECT * FROM reports WHERE id = $1 OR report_number = $1 LIMIT 1`,
+ SELECT r.*, u.username
+FROM reports r
+LEFT JOIN users u
+ON LOWER(r.registered_user) = LOWER(u.email)
+WHERE r.id = $1 OR r.report_number = $1
+LIMIT 1,
     [req.params.id]
   )
 
@@ -414,20 +447,22 @@ app.get('/report/:id', async (req, res) => {
 
   const report = {
     ...row,
-    reportNumber: row.report_number,
-    cardName: row.card_name,
-    cardNumber: row.card_number,
-    cardGrade: row.card_grade,
-    setName: row.set_name,
-    reportDate: row.report_date,
-    registeredUser: row.registered_user,
-    cardImage: row.card_image,
-    reportFile: row.report_file,
-    subgrades: {
-      centering: row.centering,
-      corners: row.corners,
-      edges: row.edges,
-      surface: row.surface,
+  reportNumber: row.report_number,
+  cardName: row.card_name,
+  cardNumber: row.card_number,
+  cardGrade: roundedGrade,
+  setName: row.set_name,
+  reportDate: row.report_date,
+  registeredUser: row.username || '',
+  cardImage: row.card_image,
+  reportFile: row.report_file,
+  card_category: row.card_category,
+  pokemon_type: row.pokemon_type,
+  subgrades: {
+    centering: row.centering,
+    corners: row.corners,
+    edges: row.edges,
+    surface: row.surface,
     },
   }
 
