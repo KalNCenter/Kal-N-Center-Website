@@ -1,19 +1,27 @@
 <%- include('partials/header') %>
 <section class="hero-card">
-  <div class="hero-slider" data-slider>
-    <% banners.forEach(function(banner, index) { %>
-      <div class="hero-slide <%= index === 0 ? 'show' : '' %>"><img src="<%= banner %>" alt="Banner <%= index + 1 %>" /></div>
-    <% }) %>
+  <div class="hero-video-wrap">
+
+    <!-- Background Video -->
+    <video class="hero-video" autoplay muted loop playsinline>
+      <source src="/videos/hero.mp4" type="video/mp4">
+    </video>
+
+    <!-- Dark Overlay -->
     <div class="hero-overlay"></div>
+
+    <!-- Content -->
     <div class="hero-content">
       <span class="hero-badge">Welcome</span>
       <h2><%= content.heroTitle %></h2>
       <p><%= content.heroSubtitle %></p>
+
       <div class="hero-actions">
         <a class="btn btn-dark" href="/signup">Create Account</a>
         <a class="btn btn-blue" href="/card-reports">Browse Reports</a>
       </div>
     </div>
+
   </div>
 </section>
 <section class="grid three">
