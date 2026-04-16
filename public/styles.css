@@ -43,3 +43,22 @@
   background: #111;
   box-shadow: 0 0 10px rgba(255,255,255,0.15);
 }
+
+.logo-block {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.site-logo {
+  height: 50px; /* adjust to taste */
+  width: auto;
+  object-fit: contain;
+}
+
+.top-subtitle {
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: #777;
+  margin-top: 2px;
+}
