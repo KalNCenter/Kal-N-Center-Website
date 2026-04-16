@@ -15,6 +15,9 @@
     <nav class="nav-list">
       <a class="nav-link <%= currentPath === '/' ? 'active' : '' %>" href="/"><%= navLabels.home %></a>
       <a class="nav-link <%= currentPath === '/my-reports' ? 'active' : '' %>" href="/my-reports"><%= navLabels.myReports %></a>
+<% if (currentUser) { %>
+  <a class="nav-link <%= currentPath === '/my-badges' ? 'active' : '' %>" href="/my-badges">My Badges</a>
+<% } %>
       <a class="nav-link <%= currentPath === '/card-reports' ? 'active' : '' %>" href="/card-reports"><%= navLabels.cardReports %></a>
       <a class="nav-link <%= currentPath === '/merchandise' ? 'active' : '' %>" href="/merchandise"><%= navLabels.merchandise %></a>
       <% if (isAdmin) { %>
@@ -27,9 +30,11 @@
   </aside>
   <main class="main-column">
     <header class="topbar">
-      <div>
-        <h1 class="top-title"><%= siteName %></h1>
-        <div class="top-subtitle">PRE-GRADING & NOVELTY SLABS</div>
+<div class="logo-block">
+  <a href="/">
+    <img src="/images/logo.png" alt="Kal'N-Center Logo" class="site-logo" />
+  </a>
+  <div class="top-subtitle">PRE-GRADING & NOVELTY SLABS</div>
       </div>
       <div class="top-actions">
         <% if (currentUser) { %>
