@@ -625,96 +625,105 @@ app.post(
         return res.status(400).json({ error: 'Missing html_file or pdf_file' })
       }
 
-const htmlBuffer = fs.readFileSync(htmlFile.path)
-const pdfBuffer = fs.readFileSync(pdfFile.path)
+      const htmlBuffer = fs.readFileSync(htmlFile.path)
+      const pdfBuffer = fs.readFileSync(pdfFile.path)
 
-const htmlKey = `reports/${reportNumber}/index.html`
-const pdfKey = `reports/${reportNumber}/report.pdf`
+      const htmlKey = `reports/${reportNumber}/index.html`
+      const pdfKey = `reports/${reportNumber}/report.pdf`
 
-await s3.send(
-  new PutObjectCommand({
-    Bucket: process.env.S3_BUCKET,
-    Key: htmlKey,
-    Body: htmlBuffer,
-    ContentType: 'text/html',
-  })
-)
+      await s3.send(
+        new PutObjectCommand({
+          Bucket: process.env.S3_BUCKET,
+          Key: htmlKey,
+          Body: htmlBuffer,
+          ContentType: 'text/html',
+        })
+      )
 
-await s3.send(
-  new PutObjectCommand({
-    Bucket: process.env.S3_BUCKET,
-    Key: pdfKey,
-    Body: pdfBuffer,
-    ContentType: 'application/pdf',
-  })
-)
+      await s3.send(
+        new PutObjectCommand({
+          Bucket: process.env.S3_BUCKET,
+          Key: pdfKey,
+          Body: pdfBuffer,
+          ContentType: 'application/pdf',
+        })
+      )
 
-const htmlUrl = `https://${process.env.S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${htmlKey}`
-const pdfUrl = `https://${process.env.S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${pdfKey}`
+      const htmlUrl = `https://${process.env.S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${htmlKey}`
+      const pdfUrl = `https://${process.env.S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${pdfKey}`
 
-await query(
-  `INSERT INTO reports (
-    id,
-    report_number,
-    card_name,
-    card_number,
-    card_grade,
-    set_name,
-    report_date,
-    registered_user,
-    tradable,
-    card_image,
-    report_file,
-    notes,
-    centering,
-    corners,
-    edges,
-    surface
-  ) VALUES (
-    $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16
-  )
-  ON CONFLICT (report_number)
-  DO UPDATE SET
-    card_name = EXCLUDED.card_name,
-    card_number = EXCLUDED.card_number,
-    card_grade = EXCLUDED.card_grade,
-    set_name = EXCLUDED.set_name,
-    report_date = EXCLUDED.report_date,
-    registered_user = EXCLUDED.registered_user,
-    tradable = EXCLUDED.tradable,
-    card_image = EXCLUDED.card_image,
-    report_file = EXCLUDED.report_file,
-    notes = EXCLUDED.notes,
-    centering = EXCLUDED.centering,
-    corners = EXCLUDED.corners,
-    edges = EXCLUDED.edges,
-    surface = EXCLUDED.surface`,
-  [
-    makeId('rpt'),
-    reportNumber,
-    String(req.body.card_name || '').trim(),
-    String(req.body.card_number || '').trim(),
-    String(req.body.card_grade || '').trim(),
-    String(req.body.set_name || '').trim(),
-    String(req.body.report_date || '').trim() || null,
-    String(req.body.registered_user || '').trim(),
-    String(req.body.tradable || '').toLowerCase() === 'true',
-    String(req.body.card_image || '').trim(),
-    pdfUrl,
-    String(req.body.notes || '').trim(),
-    String(req.body.centering || '').trim(),
-    String(req.body.corners || '').trim(),
-    String(req.body.edges || '').trim(),
-    String(req.body.surface || '').trim(),
-  ]
-)
-if (req.body.registered_user) {
-  await checkAndUnlockBadges(req.body.registered_user);
-}
+      await query(
+        `INSERT INTO reports (
+          id,
+          report_number,
+          card_name,
+          card_number,
+          card_grade,
+          set_name,
+          report_date,
+          registered_user,
+          tradable,
+          card_image,
+          report_file,
+          notes,
+          centering,
+          corners,
+          edges,
+          surface,
+          card_category,
+          pokemon_type
+        )
+        VALUES (
+          $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18
+        )
+        ON CONFLICT (report_number)
+        DO UPDATE SET
+          card_name = EXCLUDED.card_name,
+          card_number = EXCLUDED.card_number,
+          card_grade = EXCLUDED.card_grade,
+          set_name = EXCLUDED.set_name,
+          report_date = EXCLUDED.report_date,
+          registered_user = EXCLUDED.registered_user,
+          tradable = EXCLUDED.tradable,
+          card_image = EXCLUDED.card_image,
+          report_file = EXCLUDED.report_file,
+          notes = EXCLUDED.notes,
+          centering = EXCLUDED.centering,
+          corners = EXCLUDED.corners,
+          edges = EXCLUDED.edges,
+          surface = EXCLUDED.surface,
+          card_category = EXCLUDED.card_category,
+          pokemon_type = EXCLUDED.pokemon_type`,
+        [
+          makeId('rpt'),
+          reportNumber,
+          String(req.body.card_name || '').trim(),
+          String(req.body.card_number || '').trim(),
+          String(req.body.card_grade || '').trim(),
+          String(req.body.set_name || '').trim(),
+          String(req.body.report_date || '').trim() || null,
+          String(req.body.registered_user || '').trim(),
+          String(req.body.tradable || '').toLowerCase() === 'true',
+          String(req.body.card_image || '').trim(),
+          pdfUrl,
+          String(req.body.notes || '').trim(),
+          String(req.body.centering || '').trim(),
+          String(req.body.corners || '').trim(),
+          String(req.body.edges || '').trim(),
+          String(req.body.surface || '').trim(),
+          String(req.body.card_type || '').trim(),
+          String(req.body.pokemon_type || '').trim(),
+        ]
+      )
+
+      if (req.body.registered_user) {
+        await checkAndUnlockBadges(req.body.registered_user)
+      }
+
       return res.json({
         success: true,
         report_url: htmlUrl,
-        pdf_url: pdfUrl
+        pdf_url: pdfUrl,
       })
     } catch (err) {
       console.error('Upload error:', err)
@@ -722,7 +731,6 @@ if (req.body.registered_user) {
     }
   }
 )
-
 app.post('/api/upload-report', async (req, res) => {
   try {
     const {
