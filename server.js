@@ -433,44 +433,44 @@ app.get('/report/:id', async (req, res) => {
     [req.params.id]
   )
 
-const row = result.rows[0]
+  const row = result.rows[0]
 
-if (!row) {
-  return res.status(404).render(
-    'message',
-    await sharedViewData(req, {
-      title: 'Not Found',
-      heading: 'Report not found',
-      body: 'The requested report could not be found.',
-    })
-  )
-}
+  if (!row) {
+    return res.status(404).render(
+      'message',
+      await sharedViewData(req, {
+        title: 'Not Found',
+        heading: 'Report not found',
+        body: 'The requested report could not be found.',
+      })
+    )
+  }
 
-const roundedGrade =
-  row.card_grade !== null && row.card_grade !== undefined && row.card_grade !== ''
-    ? (Math.round(Number(row.card_grade) * 2) / 2).toFixed(1)
-    : ''
+  const roundedGrade =
+    row.card_grade !== null && row.card_grade !== undefined && row.card_grade !== ''
+      ? (Math.round(Number(row.card_grade) * 2) / 2).toFixed(1)
+      : ''
 
-const report = {
-  ...row,
-  reportNumber: row.report_number,
-  cardName: row.card_name,
-  cardNumber: row.card_number,
-  cardGrade: roundedGrade,
-  setName: row.set_name,
-  reportDate: row.report_date,
-  registeredUser: row.username || '',
-  cardImage: row.card_image,
-  reportFile: row.report_file,
-  card_category: row.card_category,
-  pokemon_type: row.pokemon_type,
-  subgrades: {
-    centering: row.centering,
-    corners: row.corners,
-    edges: row.edges,
-    surface: row.surface,
-  },
-}
+  const report = {
+    ...row,
+    reportNumber: row.report_number,
+    cardName: row.card_name,
+    cardNumber: row.card_number,
+    cardGrade: roundedGrade,
+    setName: row.set_name,
+    reportDate: row.report_date,
+    registeredUser: row.username || '',
+    cardImage: row.card_image,
+    reportFile: row.report_file,
+    card_category: row.card_category,
+    pokemon_type: row.pokemon_type,
+    subgrades: {
+      centering: row.centering,
+      corners: row.corners,
+      edges: row.edges,
+      surface: row.surface,
+    },
+  }
 
   const reportUrl = `${getBaseUrl(req)}/report/${report.id}`
   const qr = await QRCode.toDataURL(reportUrl)
