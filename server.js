@@ -339,6 +339,7 @@ res.render('my-reports', {
   userRecord: user,
   recentBadges,
 });
+})
 
 app.post('/my-reports/toggle-trades', requireLogin, async (req, res) => {
   const user = await getCurrentUser(req)
