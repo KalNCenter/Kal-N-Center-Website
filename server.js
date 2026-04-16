@@ -331,15 +331,14 @@ const unlockedKeys = unlocked.rows.map(r => r.badge_key);
 const recentBadges = unlockedKeys
   .map(key => BADGES.badges.find(b => b.key === key))
   .filter(Boolean);
-);
-  res.render('my-reports', {
-    ...(await sharedViewData(req)),
-    title: 'My Reports',
-    reports,
-    userRecord: user,
-    recentBadges,
-  })
-})
+
+res.render('my-reports', {
+  ...(await sharedViewData(req)),
+  title: 'My Reports',
+  reports,
+  userRecord: user,
+  recentBadges,
+});
 
 app.post('/my-reports/toggle-trades', requireLogin, async (req, res) => {
   const user = await getCurrentUser(req)
