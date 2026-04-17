@@ -575,7 +575,7 @@ app.post(
 
     await query(
       `INSERT INTO reports (
-        id, report_number, card_name, card_number, card_grade, set_name,
+        report_number, card_name, card_number, card_grade, set_name,
         report_date, registered_user, tradable, card_image, report_file,
         notes, centering, corners, edges, surface
       ) VALUES (
@@ -654,7 +654,6 @@ app.post(
 
       await query(
         `INSERT INTO reports (
-          id,
           report_number,
           card_name,
           card_number,
