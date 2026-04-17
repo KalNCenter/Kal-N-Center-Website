@@ -1,55 +1,71 @@
 <%- include('partials/header') %>
 
-<section class="grid report-grid">
-  <div class="panel">
-    <h2><%= report.reportNumber %></h2>
-    <div class="report-header">
-      <img
-        class="report-card-image"
-        src="<%= report.cardImage || 'https://placehold.co/300x420?text=Card' %>"
-        alt="<%= report.cardName || 'Card image' %>"
-      />
-
-      <div class="report-meta">
-        <p><strong>Card Name:</strong> <%= report.cardName || '' %></p>
-        <p><strong>Card Number:</strong> <%= report.cardNumber || '' %></p>
-        <p><strong>Grade:</strong> <%= report.cardGrade || '' %></p>
-        <p><strong>Set Name:</strong> <%= report.setName || '' %></p>
-        <p><strong>Card Type:</strong> <%= report.card_category || '' %></p>
-        <p><strong>Pokémon Type:</strong> <%= report.pokemon_type || '' %></p>
-        <p><strong>Report Date:</strong> <%= report.reportDate ? new Date(report.reportDate).toLocaleDateString() : '' %></p>
-        <p><strong>Registered User:</strong> <%= report.registeredUser || '' %></p>
-
-        <% if (report.notes) { %>
-          <p><strong>Notes:</strong> <%= report.notes %></p>
-        <% } %>
-
-        <% if (report.reportFile) { %>
-          <p>
-            <a class="btn btn-dark" href="<%= report.reportFile %>" target="_blank" rel="noreferrer">
-              Open Uploaded Report File
-            </a>
-          </p>
-        <% } %>
-      </div>
-    </div>
-  </div>
-
-  <div class="panel accent-blue">
-    <h3>QR Code</h3>
-    <p class="muted">Scan this QR code to open this report page.</p>
-    <img class="qr-image" src="<%= qrDataUrl %>" alt="QR Code" />
-    <p class="qr-url"><%= reportUrl %></p>
+<section class="section-head">
+  <div>
+    <h2>My Reports</h2>
+    <p class="muted">Reports registered under: <%= userRecord.email %></p>
   </div>
 </section>
 
 <section class="panel">
-  <h3>Subgrades</h3>
-  <div class="grid four">
-    <div class="subgrade-box"><strong>Centering</strong><span><%= report.subgrades?.centering || '-' %></span></div>
-    <div class="subgrade-box"><strong>Corners</strong><span><%= report.subgrades?.corners || '-' %></span></div>
-    <div class="subgrade-box"><strong>Edges</strong><span><%= report.subgrades?.edges || '-' %></span></div>
-    <div class="subgrade-box"><strong>Surface</strong><span><%= report.subgrades?.surface || '-' %></span></div>
+  <h3>Recent Badges</h3>
+  <div class="badge-row">
+    <% if (recentBadges && recentBadges.length) { %>
+      <% recentBadges.forEach(b => { %>
+        <img src="/badges/<%= b.file %>" alt="<%= b.title %>" style="height:60px; margin-right:8px;" />
+      <% }) %>
+    <% } else { %>
+      <p class="muted">No badges unlocked yet.</p>
+    <% } %>
+  </div>
+</section>
+
+<section class="panel table-panel">
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Card Name</th>
+          <th>Card Grade</th>
+          <th>Card Number</th>
+          <th>Card Set Name</th>
+          <th>Card Type</th>
+          <th>Pokémon Type</th>
+          <th>Report Date</th>
+          <th>Report Number</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (!reports.length) { %>
+          <tr>
+            <td class="empty" colspan="9">No reports found.</td>
+          </tr>
+        <% } %>
+
+        <% reports.forEach(function(report) { %>
+          <tr>
+<td>
+  <a href="/report/<%= report.id %>">
+    <img
+      class="thumb"
+      src="<%= report.cardImage || 'https://placehold.co/60x80?text=Card' %>"
+      alt="<%= report.cardName || 'Card image' %>"
+    />
+  </a>
+</td>
+            <td><%= report.cardName || '' %></td>
+            <td><%= report.cardGrade || '' %></td>
+            <td><%= report.cardNumber || '' %></td>
+            <td><%= report.setName || '' %></td>
+            <td><%= report.card_category || '' %></td>
+            <td><%= report.pokemon_type || '' %></td>
+            <td><%= report.reportDate ? new Date(report.reportDate).toLocaleDateString() : '' %></td>
+            <td><a href="/report/<%= report.id %>"><%= report.reportNumber || '' %></a></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
   </div>
 </section>
 
