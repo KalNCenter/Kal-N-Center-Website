@@ -32,40 +32,25 @@
       </thead>
       <tbody>
         <% reports.forEach(function(report) { %>
-<tr>
-  <!-- Image -->
-<td>
-  <a href="/report/<%= report.id %>">
-    <img
-      class="thumb"
-      src="<%= report.cardImage || 'https://placehold.co/60x80?text=Card' %>"
-      alt="<%= report.cardName || 'Card image' %>"
-    />
-  </a>
-</td>
+          <tr>
+            <td>
+              <a href="/report/<%= report.reportNumber %>">
+                <img
+                  class="thumb"
+                  src="<%= report.cardImage || 'https://placehold.co/60x80?text=Card' %>"
+                  alt="<%= report.cardName || 'Card image' %>"
+                />
+              </a>
+            </td>
 
-  <!-- Card Name -->
-  <td><%= report.cardName || '' %></td>
-
-  <!-- Card Grade -->
-  <td><%= report.cardGrade || '' %></td>
-
-  <!-- Card # -->
-  <td><%= report.cardNumber || '' %></td>
-
-  <!-- Card Set Name -->
-  <td><%= report.setName || '' %></td>
-
-  <!-- Report Date -->
-  <td><%= report.reportDate ? new Date(report.reportDate).toLocaleDateString() : '' %></td>
-
-  <!-- Report # -->
-  <td><a href="/report/<%= report.id %>"><%= report.reportNumber %></a></td>
-
-  <!-- Registered User -->
-  <td><%= report.registeredUser || '' %></td>
-
-</tr>
+            <td><%= report.cardName || '' %></td>
+            <td><%= report.cardGrade || '' %></td>
+            <td><%= report.cardNumber || '' %></td>
+            <td><%= report.setName || '' %></td>
+            <td><%= report.reportDate ? new Date(report.reportDate).toLocaleDateString() : '' %></td>
+            <td><a href="/report/<%= report.reportNumber %>"><%= report.reportNumber || '' %></a></td>
+            <td><%= report.registeredUser || '' %></td>
+          </tr>
         <% }) %>
       </tbody>
     </table>
