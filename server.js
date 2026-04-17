@@ -723,9 +723,9 @@ await query(
         report_url: htmlUrl,
         pdf_url: pdfUrl,
       })
-    } catch (err) {
-      console.error('Upload error:', err)
-      return res.status(500).json({ error: 'Upload failed' })
+} catch (err) {
+  console.error('Upload error:', err.message, err.stack)
+  return res.status(500).json({ error: err.message })
     }
   }
 )
