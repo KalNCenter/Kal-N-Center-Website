@@ -338,16 +338,17 @@ app.get('/my-reports', requireLogin, async (req, res) => {
     [user.email.toLowerCase()]
   )
 
-  const reports = result.rows.map((report) => ({
-    ...report,
-    reportNumber: report.report_number,
-    cardName: report.card_name,
-    cardNumber: report.card_number,
-    cardGrade: report.card_grade,
-    setName: report.set_name,
-    reportDate: report.report_date,
-    registeredUser: report.registered_user,
-    cardImage: report.card_image,
+   const reports = result.rows.map((report) => ({
+     ...report,
+     reportNumber: report.report_number,
+     cardName: report.card_name,
+     cardNumber: report.card_number,
+     cardGrade: report.card_grade,
+     setName: report.set_name,
+     setReleaseYear: report.set_release_year || '',
+     reportDate: report.report_date,
+     registeredUser: report.username || '',
+     cardImage: report.card_image,
   }))
 const unlocked = await query(
   'SELECT badge_key FROM user_badges WHERE LOWER(user_email) = LOWER($1) ORDER BY unlocked_at DESC LIMIT 5',
@@ -402,16 +403,19 @@ app.get('/card-reports', async (req, res) => {
     ORDER BY r.created_at DESC
   `)
 
-  const reports = result.rows.map((report) => ({
+const reports = result.rows.map((report) => ({
     ...report,
     reportNumber: report.report_number,
     cardName: report.card_name,
     cardNumber: report.card_number,
     cardGrade: report.card_grade,
     setName: report.set_name,
+    setReleaseYear: report.set_release_year || '',
     reportDate: report.report_date,
-    registeredUser: report.username || '',
+    registeredUser: report.registered_user,
     cardImage: report.card_image,
+    card_category: report.card_category || '',
+    pokemon_type: report.pokemon_type || '',
   }))
 
   res.render('card-reports', {
@@ -423,12 +427,7 @@ app.get('/card-reports', async (req, res) => {
 
 app.get('/report/:id', async (req, res) => {
   const result = await query(
-    `SELECT r.*, u.username
-     FROM reports r
-     LEFT JOIN users u
-     ON LOWER(r.registered_user) = LOWER(u.email)
-     WHERE r.id = $1 OR r.report_number = $1
-     LIMIT 1`,
+    `SELECT * FROM reports WHERE id = $1 OR report_number = $1 LIMIT 1`,
     [req.params.id]
   )
 
@@ -444,6 +443,24 @@ app.get('/report/:id', async (req, res) => {
       })
     )
   }
+
+  if (row.report_html_url) {
+    return res.redirect(row.report_html_url)
+  }
+
+  if (row.report_file) {
+    return res.redirect(row.report_file)
+  }
+
+  return res.status(404).render(
+    'message',
+    await sharedViewData(req, {
+      title: 'Not Found',
+      heading: 'Report file not found',
+      body: 'No uploaded HTML report is linked for this report yet.',
+    })
+  )
+})
 
   const roundedGrade =
     row.card_grade !== null && row.card_grade !== undefined && row.card_grade !== ''
@@ -654,6 +671,7 @@ app.post(
 
 await query(
   `INSERT INTO reports (
+    id,
     report_number,
     card_name,
     card_number,
@@ -664,6 +682,7 @@ await query(
     tradable,
     card_image,
     report_file,
+    report_html_url,
     notes,
     centering,
     corners,
@@ -673,7 +692,7 @@ await query(
     pokemon_type
   )
   VALUES (
-    $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17
+    $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19
   )
   ON CONFLICT (report_number)
   DO UPDATE SET
@@ -693,7 +712,9 @@ await query(
     surface = EXCLUDED.surface,
     card_category = EXCLUDED.card_category,
     pokemon_type = EXCLUDED.pokemon_type`,
+    report_html_url = EXCLUDED.report_html_url,
   [
+    makeId('rpt'),
     reportNumber,
     String(req.body.card_name || '').trim(),
     String(req.body.card_number || '').trim(),
@@ -703,7 +724,7 @@ await query(
     String(req.body.registered_user || '').trim(),
     String(req.body.tradable || '').toLowerCase() === 'true',
     String(req.body.card_image || '').trim(),
-    pdfUrl,
+    htmlUrl,pdfUrl,
     String(req.body.notes || '').trim(),
     String(req.body.centering || '').trim(),
     String(req.body.corners || '').trim(),
