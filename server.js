@@ -84,10 +84,12 @@ async function checkAndUnlockBadges(userEmail) {
     [userEmail]
   );
 
-  const rows = reports.rows;
+  const rows = reports.rows || [];
 
-  for (const badge of BADGES.badges) {
+  for (const badge of (BADGES.badges || [])) {
     const rule = badge.rule;
+    if (!rule || !rule.type) continue;
+
     let unlocked = false;
 
     if (rule.type === 'total_reports_count') {
