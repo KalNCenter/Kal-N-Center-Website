@@ -338,17 +338,19 @@ app.get('/my-reports', requireLogin, async (req, res) => {
     [user.email.toLowerCase()]
   )
 
-   const reports = result.rows.map((report) => ({
-     ...report,
-     reportNumber: report.report_number,
-     cardName: report.card_name,
-     cardNumber: report.card_number,
-     cardGrade: report.card_grade,
-     setName: report.set_name,
-     setReleaseYear: report.set_release_year || '',
-     reportDate: report.report_date,
-     registeredUser: report.username || '',
-     cardImage: report.card_image,
+  const reports = result.rows.map((report) => ({
+    ...report,
+    reportNumber: report.report_number,
+    cardName: report.card_name,
+    cardNumber: report.card_number,
+    cardGrade: report.card_grade,
+    setName: report.set_name,
+    setReleaseYear: report.set_release_year || '',
+    reportDate: report.report_date,
+    registeredUser: report.registered_user || '',
+    cardImage: report.card_image,
+    card_category: report.card_category || '',
+    pokemon_type: report.pokemon_type || '',
   }))
 const unlocked = await query(
   'SELECT badge_key FROM user_badges WHERE LOWER(user_email) = LOWER($1) ORDER BY unlocked_at DESC LIMIT 5',
@@ -412,7 +414,7 @@ const reports = result.rows.map((report) => ({
     setName: report.set_name,
     setReleaseYear: report.set_release_year || '',
     reportDate: report.report_date,
-    registeredUser: report.registered_user,
+    registeredUser: report.username || '',
     cardImage: report.card_image,
     card_category: report.card_category || '',
     pokemon_type: report.pokemon_type || '',
@@ -458,46 +460,6 @@ app.get('/report/:id', async (req, res) => {
       title: 'Not Found',
       heading: 'Report file not found',
       body: 'No uploaded HTML report is linked for this report yet.',
-    })
-  )
-})
-
-  const roundedGrade =
-    row.card_grade !== null && row.card_grade !== undefined && row.card_grade !== ''
-      ? (Math.round(Number(row.card_grade) * 2) / 2).toFixed(1)
-      : ''
-
-  const report = {
-    ...row,
-    reportNumber: row.report_number,
-    cardName: row.card_name,
-    cardNumber: row.card_number,
-    cardGrade: roundedGrade,
-    setName: row.set_name,
-    reportDate: row.report_date,
-    registeredUser: row.username || '',
-    cardImage: row.card_image,
-    reportFile: row.report_file,
-    card_category: row.card_category,
-    pokemon_type: row.pokemon_type,
-    subgrades: {
-      centering: row.centering,
-      corners: row.corners,
-      edges: row.edges,
-      surface: row.surface,
-    },
-  }
-
-  const reportUrl = `${getBaseUrl(req)}/report/${report.id}`
-  const qr = await QRCode.toDataURL(reportUrl)
-
-  res.render(
-    'report-detail',
-    await sharedViewData(req, {
-      title: report.reportNumber,
-      report,
-      qrDataUrl: qr,
-      reportUrl,
     })
   )
 })
@@ -592,7 +554,7 @@ app.post(
 
     await query(
       `INSERT INTO reports (
-        report_number, card_name, card_number, card_grade, set_name,
+        id, report_number, card_name, card_number, card_grade, set_name,
         report_date, registered_user, tradable, card_image, report_file,
         notes, centering, corners, edges, surface
       ) VALUES (
@@ -705,14 +667,14 @@ await query(
     tradable = EXCLUDED.tradable,
     card_image = EXCLUDED.card_image,
     report_file = EXCLUDED.report_file,
+    report_html_url = EXCLUDED.report_html_url,
     notes = EXCLUDED.notes,
     centering = EXCLUDED.centering,
     corners = EXCLUDED.corners,
     edges = EXCLUDED.edges,
     surface = EXCLUDED.surface,
     card_category = EXCLUDED.card_category,
-    pokemon_type = EXCLUDED.pokemon_type`,
-    report_html_url = EXCLUDED.report_html_url,
+    pokemon_type = EXCLUDED.pokemon_type
   [
     makeId('rpt'),
     reportNumber,
@@ -724,7 +686,8 @@ await query(
     String(req.body.registered_user || '').trim(),
     String(req.body.tradable || '').toLowerCase() === 'true',
     String(req.body.card_image || '').trim(),
-    htmlUrl,pdfUrl,
+    pdfUrl,
+    htmlUrl,
     String(req.body.notes || '').trim(),
     String(req.body.centering || '').trim(),
     String(req.body.corners || '').trim(),
