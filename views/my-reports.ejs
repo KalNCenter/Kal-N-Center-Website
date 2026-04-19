@@ -28,40 +28,44 @@
           <th>Image</th>
           <th>Card Name</th>
           <th>Card Grade</th>
-          <th>Card Number</th>
           <th>Card Set Name</th>
+          <th>Set Release Year</th>
+          <th>Card #</th>
           <th>Card Type</th>
           <th>Pokémon Type</th>
           <th>Report Date</th>
-          <th>Report Number</th>
+          <th>Report #</th>
+          <th>Registered User</th>
         </tr>
       </thead>
       <tbody>
         <% if (!reports.length) { %>
           <tr>
-            <td class="empty" colspan="9">No reports found.</td>
+            <td class="empty" colspan="11">No reports found.</td>
           </tr>
         <% } %>
 
         <% reports.forEach(function(report) { %>
           <tr>
-<td>
-  <a href="/report/<%= report.id %>">
-    <img
-      class="thumb"
-      src="<%= report.cardImage || 'https://placehold.co/60x80?text=Card' %>"
-      alt="<%= report.cardName || 'Card image' %>"
-    />
-  </a>
-</td>
+            <td>
+              <a href="/report/<%= report.reportNumber %>">
+                <img
+                  class="thumb"
+                  src="<%= report.cardImage || 'https://placehold.co/60x80?text=Card' %>"
+                  alt="<%= report.cardName || 'Card image' %>"
+                />
+              </a>
+            </td>
             <td><%= report.cardName || '' %></td>
             <td><%= report.cardGrade || '' %></td>
-            <td><%= report.cardNumber || '' %></td>
             <td><%= report.setName || '' %></td>
+            <td><%= report.setReleaseYear || '' %></td>
+            <td><%= report.cardNumber || '' %></td>
             <td><%= report.card_category || '' %></td>
             <td><%= report.pokemon_type || '' %></td>
             <td><%= report.reportDate ? new Date(report.reportDate).toLocaleDateString() : '' %></td>
-            <td><a href="/report/<%= report.id %>"><%= report.reportNumber || '' %></a></td>
+            <td><a href="/report/<%= report.reportNumber %>"><%= report.reportNumber || '' %></a></td>
+            <td><%= report.registeredUser || '' %></td>
           </tr>
         <% }) %>
       </tbody>

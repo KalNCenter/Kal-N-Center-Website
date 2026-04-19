@@ -19,16 +19,17 @@
   <div class="table-wrap">
     <table id="reportsTable">
       <thead>
-        <tr>
+       <tr>
           <th>Image</th>
           <th>Card Name</th>
           <th>Card Grade</th>
+          <th>Set Name</th>
+          <th>Set Release Year</th>
           <th>Card #</th>
-          <th>Card Set Name</th>
           <th>Report Date</th>
           <th>Report #</th>
           <th>Registered User</th>
-        </tr>
+       </tr>
       </thead>
       <tbody>
         <% reports.forEach(function(report) { %>
@@ -45,8 +46,9 @@
 
             <td><%= report.cardName || '' %></td>
             <td><%= report.cardGrade || '' %></td>
-            <td><%= report.cardNumber || '' %></td>
             <td><%= report.setName || '' %></td>
+            <td><%= report.setReleaseYear || '' %></td>
+            <td><%= report.cardNumber || '' %></td>
             <td><%= report.reportDate ? new Date(report.reportDate).toLocaleDateString() : '' %></td>
             <td><a href="/report/<%= report.reportNumber %>"><%= report.reportNumber || '' %></a></td>
             <td><%= report.registeredUser || '' %></td>
