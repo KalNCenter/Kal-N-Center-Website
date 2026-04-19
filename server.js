@@ -674,7 +674,7 @@ await query(
     edges = EXCLUDED.edges,
     surface = EXCLUDED.surface,
     card_category = EXCLUDED.card_category,
-    pokemon_type = EXCLUDED.pokemon_type
+    pokemon_type = EXCLUDED.pokemon_type`,
   [
     makeId('rpt'),
     reportNumber,
