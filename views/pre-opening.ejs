@@ -1,0 +1,46 @@
+<%- include('partials/header') %>
+
+<section class="panel">
+  <h2>Pre-Opening Event Sign Up</h2>
+  <p class="muted">
+    Sign up to be contacted when our San Antonio area pre-opening event date and location are selected.
+    Interested users will be contacted by text and email to choose a pre-grading time slot.
+  </p>
+
+  <% if (success) { %>
+    <div class="success-message">
+      Thank you! You are on the pre-opening event interest list.
+    </div>
+  <% } %>
+
+  <form class="form-grid single" action="/pre-opening" method="post">
+    <label>
+      <span>Name</span>
+      <input type="text" name="name" required />
+    </label>
+
+    <label>
+      <span>Email</span>
+      <input type="email" name="email" required />
+    </label>
+
+    <label>
+      <span>Phone Number</span>
+      <input type="tel" name="phone" required />
+    </label>
+
+    <label>
+      <span>City / Area</span>
+      <input type="text" name="city" placeholder="San Antonio, Helotes, New Braunfels, etc." />
+    </label>
+
+    <label>
+      <span>Notes</span>
+      <textarea name="notes" rows="4" placeholder="Optional"></textarea>
+    </label>
+
+    <button class="btn btn-dark fit" type="submit">Join Interest List</button>
+  </form>
+</section>
+
+<%- include('partials/footer') %>
