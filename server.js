@@ -484,8 +484,6 @@ app.post('/pre-opening', async (req, res) => {
   const name = String(req.body.name || '').trim()
   const email = String(req.body.email || '').trim()
   const phone = String(req.body.phone || '').trim()
-  const city = String(req.body.city || '').trim()
-  const notes = String(req.body.notes || '').trim()
 
   if (!name || !email || !phone) {
     return res.redirect('/pre-opening')
@@ -493,10 +491,10 @@ app.post('/pre-opening', async (req, res) => {
 
   await query(
     `INSERT INTO pre_opening_signups (
-      id, name, email, phone, city, notes, created_at
+      id, name, email, phone, created_at
     )
-    VALUES ($1, $2, $3, $4, $5, $6, NOW())`,
-    [makeId('event'), name, email, phone, city, notes]
+    VALUES ($1, $2, $3, $4, NOW())`,
+    [makeId('event'), name, email, phone]
   )
 
   res.redirect('/pre-opening?success=1')
