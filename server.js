@@ -470,6 +470,38 @@ app.get('/merchandise', async (req, res) => {
   res.render('merchandise', await sharedViewData(req, { title: 'Merchandise' }))
 })
 
+app.get('/pre-opening', async (req, res) => {
+  res.render(
+    'pre-opening',
+    await sharedViewData(req, {
+      title: 'Pre-Opening Event Sign Up',
+      success: req.query.success === '1',
+    })
+  )
+})
+
+app.post('/pre-opening', async (req, res) => {
+  const name = String(req.body.name || '').trim()
+  const email = String(req.body.email || '').trim()
+  const phone = String(req.body.phone || '').trim()
+  const city = String(req.body.city || '').trim()
+  const notes = String(req.body.notes || '').trim()
+
+  if (!name || !email || !phone) {
+    return res.redirect('/pre-opening')
+  }
+
+  await query(
+    `INSERT INTO pre_opening_signups (
+      id, name, email, phone, city, notes, created_at
+    )
+    VALUES ($1, $2, $3, $4, $5, $6, NOW())`,
+    [makeId('event'), name, email, phone, city, notes]
+  )
+
+  res.redirect('/pre-opening?success=1')
+})
+
 app.post('/contact', async (req, res) => {
   await query(
     `INSERT INTO contacts (id, email, message, created_at)
