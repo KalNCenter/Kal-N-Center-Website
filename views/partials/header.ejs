@@ -13,6 +13,9 @@
       <p>Track your collection and achievements.</p>
     </div>
     <nav class="nav-list">
+      <a class="nav-link <%= currentPath === '/pre-opening' ? 'active' : '' %>" href="/pre-opening">
+      Pre-Opening Event
+      </a>
       <a class="nav-link <%= currentPath === '/' ? 'active' : '' %>" href="/"><%= navLabels.home %></a>
       <a class="nav-link <%= currentPath === '/my-reports' ? 'active' : '' %>" href="/my-reports"><%= navLabels.myReports %></a>
 <% if (currentUser) { %>
